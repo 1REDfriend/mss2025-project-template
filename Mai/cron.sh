@@ -1,17 +1,18 @@
 #!/bin/bash
 
-# 1. เข้าไปที่โฟลเดอร์โปรเจกต์ก่อน (สำคัญมาก เพราะ Cron ไม่รู้ว่าเราอยู่ที่ไหน)
-cd /home/sarojphan/mss2025-project-template/
-./Mai/student4_script.sh
+# 1. cd เข้า repo ให้ถูกต้อง
+cd /home/sarojphan/mss2025-project-template/Mai
 
-# 2. ตรวจสอบว่าเป็น Branch "Tongtong" หรือไม่ ถ้าไม่ใช่ให้ switch
+# 2. รัน script update html
+./student4_script.sh
+
+# 3. กลับขึ้นไป root repo (เพื่อ commit ที่ถูกต้อง)
+cd /home/sarojphan/mss2025-project-template
+
 git checkout Mai
-
-# 3. Add ไฟล์ทั้งหมด
 git add .
 
-# 4. Commit พร้อมระบุวันที่และเวลา เพื่อไม่ให้ข้อความซ้ำ
 git commit -m "Auto Update: $(date '+%Y-%m-%d %H:%M:%S')"
 
-# 5. Push ขึ้น Server
 git push origin Mai
+

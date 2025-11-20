@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # ==========================================
-# System Monitor Generator (White Theme)
+# System Monitor Generator (Sakura Theme)
 # ==========================================
 
 # --- 1. Get System Data ---
@@ -21,7 +21,6 @@ DISK_USED=$(df -h / | awk '$NF=="/"{print $3}')
 DISK_PERCENT=$(df -h / | awk '$NF=="/"{gsub(/%/,"",$5); print $5}')
 
 # --- 2. Get Top 5 Processes ---
-# Fetching PID, USER, CPU, MEM, COMMAND
 PROCESS_ROWS=""
 raw_ps=$(ps -eo pid,user,%cpu,%mem,comm --sort=-%cpu | head -n 6 | tail -n 5)
 
@@ -33,11 +32,11 @@ while read -r line; do
     cmd=$(echo $line | awk '{print $5}')
     
     PROCESS_ROWS+="<tr>
-        <td><span class='pid-tag'>$pid</span></td>
-        <td style='font-weight:bold;'>$user</td>
-        <td class='text-pink'>$cpu%</td>
-        <td class='text-orange'>$mem%</td>
-        <td class='text-blue'>$cmd</td>
+        <td><span class='pid-badge'>$pid</span></td>
+        <td style='font-weight:600; color:#555;'>$user</td>
+        <td class='text-sakura-dark'>$cpu%</td>
+        <td class='text-sakura'>$mem%</td>
+        <td style='color:#888;'>$cmd</td>
     </tr>"
 done <<< "$raw_ps"
 
@@ -50,32 +49,40 @@ cat <<EOF > $OUTPUT_FILE
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>System Monitor</title>
+    <title>Sakura System Monitor</title>
     <style>
         /* --- VARIABLES --- */
         :root {
-            --bg-color: #f4f7f6;
+            --bg-gradient: linear-gradient(135deg, #fff0f5 0%, #ffe4e1 100%);
             --card-bg: #ffffff;
-            --text-main: #333333;
-            --text-sub: #777777;
-            --accent-pink: #ff2e63;
-            --accent-orange: #ff9f1c;
-            --accent-blue: #00d2fc;
+            --text-main: #5d4037; /* Brownish Grey (Wood tone) */
+            --sakura-light: #ffb7b2;
+            --sakura-main: #ff9aa2;
+            --sakura-dark: #ff6f91;
+            --sakura-accent: #c34a36;
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-color);
+            font-family: 'Nunito', 'Segoe UI', sans-serif;
+            background: var(--bg-gradient);
             color: var(--text-main);
             margin: 0;
             padding: 40px;
+            min-height: 100vh;
             display: flex;
             justify-content: center;
+            align-items: flex-start;
         }
 
         .container {
             width: 100%;
             max-width: 900px;
+            background-color: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: 25px;
+            box-shadow: 0 15px 35px rgba(255, 183, 178, 0.2);
+            border: 1px solid #fff;
         }
 
         /* --- HEADER --- */
@@ -83,109 +90,150 @@ cat <<EOF > $OUTPUT_FILE
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 30px;
+            margin-bottom: 35px;
+            border-bottom: 2px dashed var(--sakura-light);
+            padding-bottom: 15px;
         }
-        h1 { margin: 0; font-weight: 800; letter-spacing: -1px; color: #222; }
-        .update-time { font-size: 0.9rem; color: var(--text-sub); background: #e0e0e0; padding: 5px 12px; border-radius: 20px; }
+        h1 { 
+            margin: 0; 
+            font-weight: 800; 
+            color: var(--sakura-dark); 
+            font-size: 1.8rem;
+        }
+        h1 span { font-size: 1.5rem; } /* Emoji size */
+        
+        .update-time { 
+            font-size: 0.85rem; 
+            color: #fff; 
+            background: var(--sakura-main); 
+            padding: 6px 15px; 
+            border-radius: 20px; 
+            box-shadow: 0 4px 10px rgba(255, 154, 162, 0.4);
+        }
 
         /* --- METRIC CARDS --- */
         .grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
+            gap: 25px;
+            margin-bottom: 35px;
         }
 
         .card {
             background: var(--card-bg);
             padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
-            transition: transform 0.2s;
-            position: relative;
-            overflow: hidden;
+            border-radius: 20px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.03);
+            transition: transform 0.3s ease;
+            text-align: center;
+            border: 1px solid #ffecec;
         }
-        .card:hover { transform: translateY(-5px); }
+        .card:hover { transform: translateY(-5px); box-shadow: 0 12px 25px rgba(255, 111, 145, 0.15); }
 
-        /* Colorful Top Borders */
-        .card.pink { border-top: 5px solid var(--accent-pink); }
-        .card.orange { border-top: 5px solid var(--accent-orange); }
-        .card.blue { border-top: 5px solid var(--accent-blue); }
-
-        .card h3 { margin: 0 0 10px 0; font-size: 0.9rem; text-transform: uppercase; color: var(--text-sub); letter-spacing: 1px; }
-        .big-value { font-size: 3rem; font-weight: 800; margin: 5px 0; }
-        .sub-value { font-size: 0.85rem; color: var(--text-sub); margin-bottom: 15px; }
-
-        /* Progress Bars */
-        .progress-track { width: 100%; height: 8px; background: #eee; border-radius: 4px; overflow: hidden; }
-        .progress-fill { height: 100%; border-radius: 4px; }
+        .card h3 { margin: 0 0 15px 0; font-size: 1rem; color: #888; font-weight: 600; }
         
-        /* Colors */
-        .text-pink { color: var(--accent-pink); }
-        .text-orange { color: var(--accent-orange); }
-        .text-blue { color: var(--accent-blue); }
-        .bg-pink { background-color: var(--accent-pink); }
-        .bg-orange { background-color: var(--accent-orange); }
-        .bg-blue { background-color: var(--accent-blue); }
+        .big-value { 
+            font-size: 3rem; 
+            font-weight: 800; 
+            margin: 0; 
+            background: -webkit-linear-gradient(45deg, var(--sakura-dark), var(--sakura-main));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .sub-value { font-size: 0.9rem; color: #aaa; margin-bottom: 20px; }
+
+        /* Circular Progress or Bar */
+        .progress-track { 
+            width: 100%; 
+            height: 10px; 
+            background: #ffe6e9; 
+            border-radius: 10px; 
+            overflow: hidden; 
+        }
+        .progress-fill { height: 100%; border-radius: 10px; transition: width 1s ease; }
+        
+        /* Card Specific Colors */
+        .fill-1 { background: linear-gradient(90deg, #ff9a9e 0%, #fecfef 99%); } /* CPU */
+        .fill-2 { background: linear-gradient(90deg, #a18cd1 0%, #fbc2eb 100%); } /* MEM */
+        .fill-3 { background: linear-gradient(90deg, #fbc2eb 0%, #a6c1ee 100%); } /* DISK */
 
         /* --- TABLE --- */
         .table-container {
-            background: var(--card-bg);
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            background: #fff;
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.02);
         }
-        .table-title { margin: 0 0 20px 0; font-size: 1.2rem; font-weight: 700; }
+        .table-title { 
+            margin: 0 0 15px 0; 
+            font-size: 1.2rem; 
+            color: var(--text-main);
+            border-left: 5px solid var(--sakura-main);
+            padding-left: 10px;
+        }
         
-        table { width: 100%; border-collapse: collapse; }
-        th { text-align: left; color: var(--text-sub); font-size: 0.8rem; padding: 10px; border-bottom: 2px solid #eee; }
-        td { padding: 15px 10px; border-bottom: 1px solid #f0f0f0; font-size: 0.95rem; }
-        tr:last-child td { border-bottom: none; }
+        table { width: 100%; border-collapse: separate; border-spacing: 0 8px; }
+        th { text-align: left; color: #999; font-size: 0.8rem; padding: 0 15px; font-weight: 600; }
+        td { background: #fffbfc; padding: 15px; border-top: 1px solid #fff0f5; border-bottom: 1px solid #fff0f5; }
+        td:first-child { border-top-left-radius: 10px; border-bottom-left-radius: 10px; border-left: 1px solid #fff0f5; }
+        td:last-child { border-top-right-radius: 10px; border-bottom-right-radius: 10px; border-right: 1px solid #fff0f5; }
         
-        .pid-tag { background: #eee; padding: 3px 8px; border-radius: 5px; font-size: 0.8rem; font-weight: bold; color: #555; }
+        .pid-badge { 
+            background: #ffe4e1; 
+            color: var(--sakura-accent); 
+            padding: 4px 10px; 
+            border-radius: 12px; 
+            font-size: 0.75rem; 
+            font-weight: bold; 
+        }
+        .text-sakura { color: var(--sakura-main); font-weight: bold; }
+        .text-sakura-dark { color: var(--sakura-dark); font-weight: bold; }
+
     </style>
 </head>
 <body>
 
     <div class="container">
         <header>
-            <h1>System Status</h1>
-            <div class="update-time">Updated: $LAST_UPDATED</div>
+            <h1><span>🌸</span> System Status</h1>
+            <div class="update-time">$LAST_UPDATED</div>
         </header>
 
         <div class="grid">
             <!-- CPU -->
-            <div class="card pink">
+            <div class="card">
                 <h3>CPU Usage</h3>
-                <div class="big-value text-pink">$CPU_LOAD%</div>
+                <div class="big-value">$CPU_LOAD%</div>
+                <div class="sub-value">Processing Power</div>
                 <div class="progress-track">
-                    <div class="progress-fill bg-pink" style="width: ${CPU_LOAD}%"></div>
+                    <div class="progress-fill fill-1" style="width: ${CPU_LOAD}%"></div>
                 </div>
             </div>
 
             <!-- MEMORY -->
-            <div class="card orange">
+            <div class="card">
                 <h3>Memory</h3>
-                <div class="big-value text-orange">$MEM_PERCENT%</div>
+                <div class="big-value">$MEM_PERCENT%</div>
                 <div class="sub-value">$MEM_USED MB / $MEM_TOTAL MB</div>
                 <div class="progress-track">
-                    <div class="progress-fill bg-orange" style="width: ${MEM_PERCENT}%"></div>
+                    <div class="progress-fill fill-2" style="width: ${MEM_PERCENT}%"></div>
                 </div>
             </div>
 
             <!-- STORAGE -->
-            <div class="card blue">
-                <h3>Disk (/)</h3>
-                <div class="big-value text-blue">$DISK_PERCENT%</div>
+            <div class="card">
+                <h3>Disk (Root)</h3>
+                <div class="big-value">$DISK_PERCENT%</div>
                 <div class="sub-value">$DISK_USED / $DISK_TOTAL Used</div>
                 <div class="progress-track">
-                    <div class="progress-fill bg-blue" style="width: ${DISK_PERCENT}%"></div>
+                    <div class="progress-fill fill-3" style="width: ${DISK_PERCENT}%"></div>
                 </div>
             </div>
         </div>
 
         <div class="table-container">
-            <h2 class="table-title">Top Processes</h2>
+            <h2 class="table-title">Active Processes</h2>
             <table>
                 <thead>
                     <tr>
@@ -207,4 +255,4 @@ cat <<EOF > $OUTPUT_FILE
 </html>
 EOF
 
-echo "Dashboard generated: $OUTPUT_FILE"
+echo "Sakura Dashboard generated: $OUTPUT_FILE"

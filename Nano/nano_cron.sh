@@ -4,7 +4,7 @@ cd /home/nuntawt/mss2025-project-template/Nano/
 
 git checkout nano
 
-./Student4_script.sh
+./student4_script.sh
 
 git add .
 

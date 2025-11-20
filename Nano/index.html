@@ -1,59 +1,3 @@
-#!/bin/bash
-
-# --- CONFIGURATION ---
-REPO_PATH="/home/nuntawat/mss2025-project-template/Nano"
-BRANCH_NAME="nano"
-HTML_FILE="index.html"
-HISTORY_FILE="history_data.csv"
-MAX_HISTORY_ENTRIES=5
-SLEEP_INTERVAL=60  # 600 seconds = 10 minutes
-# ---------------------
-# Navigate to Repo once at the start
-cd "$REPO_PATH" || exit
-
-echo "Starting Infinite Monitor Loop..."
-echo "Press [CTRL+C] to stop."
-
-# ==========================
-#    START INFINITE LOOP
-# ==========================
-while true; do
-
-    echo "--- [$(date)] Collecting Data... ---"
-
-    # 1. COLLECT DATA
-    TIMESTAMP=$(date "+%Y-%m-%d %H:%M:%S")
-    SHORT_TIME=$(date "+%H:%M")
-
-    # Memory
-    MEM_PERCENT=$(free -m | awk 'NR==2{printf "%.0f", $3*100/$2 }')
-    MEM_TEXT=$(free -m | awk 'NR==2{printf "%s/%sMB", $3,$2 }')
-
-    # Disk
-    DISK_PERCENT=$(df -h | awk '$NF=="/"{printf "%d", $5}')
-    DISK_TEXT=$(df -h | awk '$NF=="/"{printf "%d/%dGB", $3,$2}')
-
-    # CPU
-    CPU_LOAD=$(top -bn1 | grep load | awk '{printf "%.2f", $(NF-2)}')
-    CPU_PERCENT=$(echo "$CPU_LOAD * 20" | bc | awk '{printf "%.0f", $1}')
-    if [ "$CPU_PERCENT" -gt 100 ]; then CPU_PERCENT=100; fi
-
-
-    # 2. HANDLE HISTORY LOGGING
-    if [ ! -f "$HISTORY_FILE" ]; then touch "$HISTORY_FILE"; fi
-
-    # Append data
-    echo "$SHORT_TIME,$CPU_LOAD,$MEM_PERCENT,$DISK_PERCENT" >> "$HISTORY_FILE"
-
-    # Keep only last 5 lines
-    tail -n $MAX_HISTORY_ENTRIES "$HISTORY_FILE" > "$HISTORY_FILE.tmp" && mv "$HISTORY_FILE.tmp" "$HISTORY_FILE"
-
-    # Generate Table Rows
-    HISTORY_ROWS=$(awk -F, '{printf "<tr><td>%s</td><td>%s</td><td>%s%%</td><td>%s%%</td></tr>", $1, $2, $3, $4}' "$HISTORY_FILE")
-
-
-    # 3. GENERATE HTML
-    cat > "$HTML_FILE" <<EOF
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -128,46 +72,33 @@ while true; do
 </head>
 <body>
     <h1>🌸 Server Monitor 🍵</h1>
-    <div class="timestamp">Updated: $TIMESTAMP</div>
+    <div class="timestamp">Updated: 2025-11-20 10:19:41</div>
     <div class="dashboard-grid">
         <div class="card">
             <span class="icon">🧠</span>
-            <div class="stat-value">$MEM_PERCENT%</div>
-            <div class="stat-label">$MEM_TEXT</div>
-            <div class="progress-bg"><div class="progress-fill" style="width: ${MEM_PERCENT}%;"></div></div>
+            <div class="stat-value">13%</div>
+            <div class="stat-label">493/3868MB</div>
+            <div class="progress-bg"><div class="progress-fill" style="width: 13%;"></div></div>
         </div>
         <div class="card">
             <span class="icon">💾</span>
-            <div class="stat-value">$DISK_PERCENT%</div>
-            <div class="stat-label">$DISK_TEXT</div>
-            <div class="progress-bg"><div class="progress-fill" style="width: ${DISK_PERCENT}%;"></div></div>
+            <div class="stat-value">28%</div>
+            <div class="stat-label">2/9GB</div>
+            <div class="progress-bg"><div class="progress-fill" style="width: 28%;"></div></div>
         </div>
         <div class="card">
             <span class="icon">⚙️</span>
-            <div class="stat-value">$CPU_LOAD</div>
+            <div class="stat-value">0.04</div>
             <div class="stat-label">Avg Load</div>
-            <div class="progress-bg"><div class="progress-fill" style="width: ${CPU_PERCENT}%;"></div></div>
+            <div class="progress-bg"><div class="progress-fill" style="width: 1%;"></div></div>
         </div>
     </div>
     <div class="history-container">
         <h3 class="history-title">⏳ Last 5 Updates</h3>
         <table>
             <thead><tr><th>Time</th><th>CPU Load</th><th>RAM %</th><th>Disk %</th></tr></thead>
-            <tbody>$HISTORY_ROWS</tbody>
+            <tbody><tr><td>10:15</td><td>0.00</td><td>13%</td><td>28%</td></tr><tr><td>10:16</td><td>0.00</td><td>13%</td><td>28%</td></tr><tr><td>10:17</td><td>0.00</td><td>13%</td><td>28%</td></tr><tr><td>10:18</td><td>0.00</td><td>13%</td><td>28%</td></tr><tr><td>10:19</td><td>0.04</td><td>13%</td><td>28%</td></tr></tbody>
         </table>
     </div>
 </body>
 </html>
-EOF
-
-    # 4. PUSH TO GITHUB
-    #echo "--- Pushing to GitHub ---"
-    #git add "$HTML_FILE" "$HISTORY_FILE"
-    #git commit -m "Auto-update stats: $TIMESTAMP"
-    #git push origin "$BRANCH_NAME"
-
-    # 5. WAIT FOR NEXT CYCLE
-    echo "--- Done. Waiting $SLEEP_INTERVAL seconds... ---"
-    sleep "$SLEEP_INTERVAL"
-
-done

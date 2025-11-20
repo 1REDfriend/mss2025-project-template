@@ -6,7 +6,6 @@ BRANCH_NAME="nano"
 HTML_FILE="index.html"
 HISTORY_FILE="history_data.csv"
 MAX_HISTORY_ENTRIES=5
-SLEEP_INTERVAL=60  # 600 seconds = 10 minutes
 # ---------------------
 # Navigate to Repo once at the start
 cd "$REPO_PATH" || exit
@@ -17,7 +16,6 @@ echo "Press [CTRL+C] to stop."
 # ==========================
 #    START INFINITE LOOP
 # ==========================
-while true; do
 
     echo "--- [$(date)] Collecting Data... ---"
 
@@ -170,4 +168,3 @@ EOF
     echo "--- Done. Waiting $SLEEP_INTERVAL seconds... ---"
     sleep "$SLEEP_INTERVAL"
 
-done

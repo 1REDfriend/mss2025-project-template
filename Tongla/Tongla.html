@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+    <title>Tongla System Monitor</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="./Tongla.js"></script>
+
+    <style>
+      /* card animation */
+      .card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+      .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+      }
+
+      /* bar animation */
+      .bar-fill {
+        transition: width 1s ease-in-out, background-color 0.4s ease;
+      }
+
+      /* smooth fade-in */
+      body {
+        animation: fadein 1s ease-in;
+      }
+      @keyframes fadein {
+        0% {
+          opacity: 0;
+        }
+        100% {
+          opacity: 1;
+        }
+      }
+    </style>
+  </head>
+
+  <body
+    class="bg-gradient-to-b from-white to-gray-100 text-gray-800 font-sans min-h-screen flex flex-col items-center p-8"
+  >
+    <h1
+      class="text-4xl font-extrabold mb-8 text-gray-900 hover:text-blue-600 transition-colors duration-300"
+    >
+      🖥️ Tongla System Monitor
+    </h1>
+
+    <!-- System Cards -->
+    <div class="grid md:grid-cols-2 gap-6 w-full max-w-5xl">
+      <div class="card bg-white rounded-xl shadow-md p-6">
+        <h2 class="text-xl font-semibold mb-4 border-b pb-2">
+          System Information
+        </h2>
+        <ul id="sys-info" class="space-y-2 text-sm text-gray-600"></ul>
+      </div>
+
+      <div class="card bg-white rounded-xl shadow-md p-6">
+        <h2 class="text-xl font-semibold mb-4 border-b pb-2">
+          Resource Usage
+        </h2>
+        <div id="usage-bars" class="space-y-5"></div>
+      </div>
+    </div>
+
+    <!-- Process List -->
+    <div
+      class="card bg-white rounded-xl shadow-md p-6 mt-8 w-full max-w-5xl overflow-x-auto"
+    >
+      <h2 class="text-xl font-semibold mb-4 border-b pb-2">Top Processes</h2>
+      <table class="w-full text-sm text-left border-t">
+        <thead>
+          <tr class="border-b text-gray-700 bg-gray-50">
+            <th class="py-2 px-2">PID</th>
+            <th class="py-2 px-2">Process</th>
+            <th class="py-2 px-2">CPU (%)</th>
+            <th class="py-2 px-2">Memory (%)</th>
+          </tr>
+        </thead>
+        <tbody id="proc-list"></tbody>
+      </table>
+    </div>
+
+    <!-- Updated Time -->
+    <p class="text-xs text-gray-500 mt-8" id="last-updated"></p>
+
+    <script>
+      const infoEl = document.getElementById("sys-info");
+      const usageEl = document.getElementById("usage-bars");
+      const procEl = document.getElementById("proc-list");
+      const timeEl = document.getElementById("last-updated");
+
+      function renderData() {
+        // Info Section
+        infoEl.innerHTML = `
+          <li><span class="font-medium text-gray-800">User:</span> ${systemStats.user}</li>
+          <li><span class="font-medium text-gray-800">IP:</span> ${systemStats.ip}</li>
+          <li><span class="font-medium text-gray-800">OS:</span> ${systemStats.os}</li>
+          <li><span class="font-medium text-gray-800">Kernel:</span> ${systemStats.kernel}</li>
+        `;
+
+        // Usage Bar
+        const usageData = [
+          { name: "CPU", value: systemStats.cpuUsage, color: "bg-blue-500" },
+          { name: "Memory", value: systemStats.memoryUsage, color: "bg-green-500" },
+          { name: "Storage", value: systemStats.diskUsage, color: "bg-purple-500" },
+        ];
+
+        usageEl.innerHTML = "";
+        usageData.forEach((u) => {
+          usageEl.innerHTML += `
+            <div>
+              <div class="flex justify-between mb-1 text-sm">
+                <span class="font-medium text-gray-700">${u.name}</span>
+                <span class="font-semibold">${u.value}%</span>
+              </div>
+              <div class="w-full bg-gray-200 h-3 rounded-full overflow-hidden">
+                <div class="${u.color} bar-fill h-3 rounded-full" 
+                  style="width: ${u.value}%"></div>
+              </div>
+            </div>`;
+        });
+
+        // Process Table
+        procEl.innerHTML = systemStats.processes
+          .map(
+            (p) => `
+          <tr class="border-b hover:bg-blue-50 transition-colors">
+            <td class="py-1 px-2">${p.pid}</td>
+            <td class="py-1 px-2">${p.name}</td>
+            <td class="py-1 px-2 text-blue-600">${p.cpu}</td>
+            <td class="py-1 px-2 text-green-600">${p.mem}</td>
+          </tr>`
+          )
+          .join("");
+
+        timeEl.textContent = `Last updated: ${systemStats.lastUpdated}`;
+      }
+
+      renderData();
+    </script>
+  </body>
+</html>

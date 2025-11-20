@@ -4,50 +4,254 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ubuntu Server Monitoring</title>
-    <!-- Import Google Font: Ubuntu -->
+
+    <!-- Google Font: Ubuntu -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;700&display=swap" rel="stylesheet">
-    <!-- Link to your stylesheet -->
-    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        ubuntu: ['Ubuntu', 'system-ui', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Ubuntu', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+    </style>
 </head>
-<body>
-    <div class="container">
-        <h1>Welcome to Ubuntu Server Monitoring!</h1>
+<body class="min-h-screen bg-slate-950 text-slate-100 flex items-center justify-center relative overflow-hidden">
 
-        <div class="button-container">
-            <a href="./Bambu/Bambu.html" class="btn">
-                Bambu Server
-            </a>
-
-            <a href="./Mai/Mai.html" class="btn">
-                Mai Server
-            </a>
-
-            <a href="./Tongla/Tongla.html" class="btn">
-                Tongla Server
-            </a>
-
-            <a href="./Toby/Toby.html" class="btn">
-                Toby Server
-            </a>
-
-            <a href="./Nano/Nano.html" class="btn">
-                Nano Server
-            </a>
-
-            <a href="./Tongtong/Tongtong.html" class="btn">
-                Tongtong Server
-            </a>
-
-            <a href="./Ohm/Ohm.html" class="btn">
-                Ohm Server
-            </a>
-
-            <a href="./Pitch/Pitch.html" class="btn">
-                Pitch Server
-            </a>
-        </div>
+    <!-- Background decoration -->
+    <div class="pointer-events-none absolute inset-0">
+        <div class="absolute -top-32 -left-16 w-72 h-72 bg-emerald-500/20 blur-3xl rounded-full"></div>
+        <div class="absolute -bottom-32 -right-16 w-80 h-80 bg-cyan-500/20 blur-3xl rounded-full"></div>
     </div>
+
+    <main class="relative w-full max-w-5xl px-4 sm:px-6 lg:px-8">
+        <section class="bg-slate-900/70 border border-slate-800/80 backdrop-blur-xl rounded-3xl shadow-2xl shadow-emerald-900/30 p-6 sm:p-8 lg:p-10">
+            <!-- Header -->
+            <header class="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                <div>
+                    <div class="inline-flex items-center gap-2 rounded-full border border-emerald-400/40 bg-emerald-500/10 px-3 py-1 text-xs font-medium text-emerald-200">
+                        <span class="h-2 w-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                        <span>Ubuntu Server Monitoring</span>
+                    </div>
+                    <h1 class="mt-4 text-3xl sm:text-4xl font-bold tracking-tight">
+                        Welcome to your server dashboard
+                    </h1>
+                    <p class="mt-2 text-sm sm:text-base text-slate-300 max-w-xl">
+                        Select a server to view its detailed monitoring status, usage statistics, and health information.
+                    </p>
+                </div>
+
+                <div class="flex flex-col items-start sm:items-end gap-1 text-xs sm:text-sm text-slate-400">
+                    <span class="uppercase tracking-[0.18em] text-slate-500">Status Overview</span>
+                    <span class="text-slate-200 font-medium">Cluster: <span class="text-emerald-300">Online</span></span>
+                    <span>Last refresh: <span class="text-slate-300">Just now</span></span>
+                </div>
+            </header>
+
+            <!-- Grid of servers -->
+            <section class="mt-4">
+                <div class="flex items-center justify-between mb-3">
+                    <h2 class="text-sm font-semibold tracking-wide text-slate-300 uppercase">
+                        Servers
+                    </h2>
+                    <span class="text-xs text-slate-400">
+                        8 instances
+                    </span>
+                </div>
+
+                <div class="grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+                    <!-- Bambu -->
+                    <a href="./Bambu/Bambu.html"
+                       class="group relative overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/70 px-4 py-4 flex items-center justify-between gap-3 hover:border-emerald-400/70 hover:bg-slate-900/95 transition">
+                        <div class="flex items-center gap-3">
+                            <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500/15 border border-emerald-400/40 text-sm font-semibold text-emerald-300">
+                                B
+                            </div>
+                            <div>
+                                <p class="text-sm font-semibold text-slate-50">
+                                    Bambu Server
+                                </p>
+                                <p class="text-xs text-slate-400">
+                                    Primary compute node
+                                </p>
+                            </div>
+                        </div>
+                        <span class="text-[11px] uppercase tracking-[0.18em] text-emerald-300 group-hover:translate-x-0.5 transition">
+                            View
+                        </span>
+                    </a>
+
+                    <!-- Mai -->
+                    <a href="./Mai/Mai.html"
+                       class="group relative overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/70 px-4 py-4 flex items-center justify-between gap-3 hover:border-emerald-400/70 hover:bg-slate-900/95 transition">
+                        <div class="flex items-center gap-3">
+                            <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500/15 border border-emerald-400/40 text-sm font-semibold text-emerald-300">
+                                M
+                            </div>
+                            <div>
+                                <p class="text-sm font-semibold text-slate-50">
+                                    Mai Server
+                                </p>
+                                <p class="text-xs text-slate-400">
+                                    Web applications & APIs
+                                </p>
+                            </div>
+                        </div>
+                        <span class="text-[11px] uppercase tracking-[0.18em] text-emerald-300 group-hover:translate-x-0.5 transition">
+                            View
+                        </span>
+                    </a>
+
+                    <!-- Tongla -->
+                    <a href="./Tongla/Tongla.html"
+                       class="group relative overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/70 px-4 py-4 flex items-center justify-between gap-3 hover:border-emerald-400/70 hover:bg-slate-900/95 transition">
+                        <div class="flex items-center gap-3">
+                            <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500/15 border border-emerald-400/40 text-sm font-semibold text-emerald-300">
+                                T
+                            </div>
+                            <div>
+                                <p class="text-sm font-semibold text-slate-50">
+                                    Tongla Server
+                                </p>
+                                <p class="text-xs text-slate-400">
+                                    Services & microservices
+                                </p>
+                            </div>
+                        </div>
+                        <span class="text-[11px] uppercase tracking-[0.18em] text-emerald-300 group-hover:translate-x-0.5 transition">
+                            View
+                        </span>
+                    </a>
+
+                    <!-- Toby -->
+                    <a href="./Toby/Toby.html"
+                       class="group relative overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/70 px-4 py-4 flex items-center justify-between gap-3 hover:border-emerald-400/70 hover:bg-slate-900/95 transition">
+                        <div class="flex items-center gap-3">
+                            <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500/15 border border-emerald-400/40 text-sm font-semibold text-emerald-300">
+                                T
+                            </div>
+                            <div>
+                                <p class="text-sm font-semibold text-slate-50">
+                                    Toby Server
+                                </p>
+                                <p class="text-xs text-slate-400">
+                                    Background workers
+                                </p>
+                            </div>
+                        </div>
+                        <span class="text-[11px] uppercase tracking-[0.18em] text-emerald-300 group-hover:translate-x-0.5 transition">
+                            View
+                        </span>
+                    </a>
+
+                    <!-- Nano -->
+                    <a href="./Nano/Nano.html"
+                       class="group relative overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/70 px-4 py-4 flex items-center justify-between gap-3 hover:border-emerald-400/70 hover:bg-slate-900/95 transition">
+                        <div class="flex items-center gap-3">
+                            <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500/15 border border-emerald-400/40 text-sm font-semibold text-emerald-300">
+                                N
+                            </div>
+                            <div>
+                                <p class="text-sm font-semibold text-slate-50">
+                                    Nano Server
+                                </p>
+                                <p class="text-xs text-slate-400">
+                                    Lightweight services
+                                </p>
+                            </div>
+                        </div>
+                        <span class="text-[11px] uppercase tracking-[0.18em] text-emerald-300 group-hover:translate-x-0.5 transition">
+                            View
+                        </span>
+                    </a>
+
+                    <!-- Tongtong -->
+                    <a href="./Tongtong/Tongtong.html"
+                       class="group relative overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/70 px-4 py-4 flex items-center justify-between gap-3 hover:border-emerald-400/70 hover:bg-slate-900/95 transition">
+                        <div class="flex items-center gap-3">
+                            <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500/15 border border-emerald-400/40 text-sm font-semibold text-emerald-300">
+                                T
+                            </div>
+                            <div>
+                                <p class="text-sm font-semibold text-slate-50">
+                                    Tongtong Server
+                                </p>
+                                <p class="text-xs text-slate-400">
+                                    File & storage node
+                                </p>
+                            </div>
+                        </div>
+                        <span class="text-[11px] uppercase tracking-[0.18em] text-emerald-300 group-hover:translate-x-0.5 transition">
+                            View
+                        </span>
+                    </a>
+
+                    <!-- Ohm -->
+                    <a href="./Ohm/Ohm.html"
+                       class="group relative overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/70 px-4 py-4 flex items-center justify-between gap-3 hover:border-emerald-400/70 hover:bg-slate-900/95 transition">
+                        <div class="flex items-center gap-3">
+                            <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500/15 border border-emerald-400/40 text-sm font-semibold text-emerald-300">
+                                O
+                            </div>
+                            <div>
+                                <p class="text-sm font-semibold text-slate-50">
+                                    Ohm Server
+                                </p>
+                                <p class="text-xs text-slate-400">
+                                    Monitoring & logs
+                                </p>
+                            </div>
+                        </div>
+                        <span class="text-[11px] uppercase tracking-[0.18em] text-emerald-300 group-hover:translate-x-0.5 transition">
+                            View
+                        </span>
+                    </a>
+
+                    <!-- Pitch -->
+                    <a href="./Pitch/Pitch.html"
+                       class="group relative overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/70 px-4 py-4 flex items-center justify-between gap-3 hover:border-emerald-400/70 hover:bg-slate-900/95 transition">
+                        <div class="flex items-center gap-3">
+                            <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500/15 border border-emerald-400/40 text-sm font-semibold text-emerald-300">
+                                P
+                            </div>
+                            <div>
+                                <p class="text-sm font-semibold text-slate-50">
+                                    Pitch Server
+                                </p>
+                                <p class="text-xs text-slate-400">
+                                    Experimental workloads
+                                </p>
+                            </div>
+                        </div>
+                        <span class="text-[11px] uppercase tracking-[0.18em] text-emerald-300 group-hover:translate-x-0.5 transition">
+                            View
+                        </span>
+                    </a>
+                </div>
+            </section>
+
+            <!-- Footer -->
+            <footer class="mt-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs text-slate-500">
+                <span>© Ubuntu Monitoring Dashboard</span>
+                <span>Use this panel to quickly jump to each server's detailed stats page.</span>
+            </footer>
+        </section>
+    </main>
 </body>
 </html>
+

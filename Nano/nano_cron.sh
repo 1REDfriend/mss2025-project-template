@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cd /home/nuntawt/mss2025-project-template/Nano/
+cd /home/nuntawt/mss2025-project-template/Nano
 
 git checkout nano
 

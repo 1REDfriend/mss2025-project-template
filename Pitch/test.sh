@@ -1,24 +1,19 @@
 
 #!/bin/bash
 cd /home/pitch/mss2025-project-template/Pitch
-OUTPUT="/home/pitch/mss2025-project-template/Pitch/Pitch.html"   # Change path based on your server
-
-# CPU usage
+OUTPUT="/home/pitch/mss2025-project-template/Pitch/Pitch.html"
 cpu_idle=$(top -bn1 | grep "Cpu(s)" | awk '{print $8}') 
 cpu_usage=$(echo "100 - $cpu_idle" | bc)
 cpu_usage_int=${cpu_usage%.*} 
 
-# Memory usage
 mem_total=$(free -m | awk '/Mem:/ {print $2}')
 mem_used=$(free -m | awk '/Mem:/ {print $3}')
 mem_percent=$(( 100 * mem_used / mem_total ))
 
-# Disk usage
 disk_avaliable=$(df -h / | awk 'NR==2 {print $2}')
 disk_usage=$(df -h / | awk 'NR==2 {print $3}')
 disk_percent=$(df -h / | awk 'NR==2 {print $5}' | tr -d '%')
 
-# System info
 DISK=$(df -h / | awk 'NR==2{print $3" used of "$2" ("$5")"}')
 UPTIME=$(uptime -p)
 LOAD_AVG=$(uptime | awk -F"load average:" '{print $2}')
@@ -27,7 +22,8 @@ HOST=$(hostnamectl | awk -F': ' '/Static hostname/ {print $2}')
 KERNEL=$(hostnamectl | awk -F': ' '/Kernel/ {print $2}')
 ARCHITECTURE=$(hostnamectl | awk -F': ' '/Architecture/ {print $2}')
 
-# CPU Status
+TOP_PROCESSES=$(ps -eo pid,ppid,cmd,%cpu,%mem --sort=-%cpu | head -n 11)
+
 if [ "$cpu_usage_int" -lt 20 ]; then
     CPU_STATUS="Normal"
     CPU_STATUS_CLASS="status-normal"
@@ -39,7 +35,6 @@ else
     CPU_STATUS_CLASS="status-critical"
 fi
 
-# Memory Status
 if [ "$mem_percent" -lt 20 ]; then
     MEM_STATUS="Normal"
     MEM_STATUS_CLASS="status-normal"
@@ -51,7 +46,6 @@ else
     MEM_STATUS_CLASS="status-critical"
 fi
 
-# Disk Status
 if [ "$disk_percent" -lt 20 ]; then
     DISK_STATUS="Normal"
     DISK_STATUS_CLASS="status-normal"
@@ -63,10 +57,8 @@ else
     DISK_STATUS_CLASS="status-critical"
 fi
 
-# Last update timestamp
 LAST_UPDATE=$(date +"%Y-%m-%d %H:%M:%S")
 
-# Generate HTML
 cat <<EOF > "$OUTPUT"
 <!DOCTYPE html>
 <html>
@@ -177,6 +169,8 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helv
 
   <div class="footer">Last updated: $LAST_UPDATE</div>
 </div>
+
+<pre> $TOP_PROCESSES </pre>
 </body>
 </html>
 EOF

@@ -1,13 +1,8 @@
 #!/bin/bash
 
-git checkout bambu
-
 cd /home/bambu/mss2025-project-template/Bambu/
-
+git checkout bambu
 ./script.sh
-
-cd /home/bambu/mss2025-project-template/
-
 git add .
 
 git commit -m "Auto Update: $(date '+%Y-%m-%d %H:%M:%S')"

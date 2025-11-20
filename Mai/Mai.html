@@ -25,7 +25,7 @@ body { font-family: 'Ubuntu', sans-serif; }
 
   <div class="p-6 bg-slate-900/70 border border-slate-800 rounded-xl shadow-lg">
     <p class="text-sm text-slate-400">Total Directories</p>
-    <p class="text-3xl font-bold text-emerald-300">147</p>
+    <p class="text-3xl font-bold text-emerald-300">148</p>
   </div>
 
   <div class="p-6 bg-slate-900/70 border border-slate-800 rounded-xl shadow-lg">
@@ -52,7 +52,7 @@ body { font-family: 'Ubuntu', sans-serif; }
     <h2 class="text-center mb-4 font-semibold">CPU Usage (%)</h2>
     <canvas id="cpuChart"></canvas>
     <p class="text-center text-xs mt-3 text-slate-500">
-      Last Updated: <span id="cpuTime">2025-11-21 01:40:29</span>
+      Last Updated: <span id="cpuTime">2025-11-21 01:41:01</span>
     </p>
   </div>
 
@@ -60,7 +60,7 @@ body { font-family: 'Ubuntu', sans-serif; }
     <h2 class="text-center mb-4 font-semibold">Memory Usage (%)</h2>
     <canvas id="memChart"></canvas>
     <p class="text-center text-xs mt-3 text-slate-500">
-      Last Updated: <span id="memTime">2025-11-21 01:40:29</span>
+      Last Updated: <span id="memTime">2025-11-21 01:41:01</span>
     </p>
   </div>
 
@@ -68,7 +68,7 @@ body { font-family: 'Ubuntu', sans-serif; }
     <h2 class="text-center mb-4 font-semibold">Storage Usage (%)</h2>
     <canvas id="storageChart"></canvas>
     <p class="text-center text-xs mt-3 text-slate-500">
-      Last Updated: <span id="storageTime">2025-11-21 01:40:29</span>
+      Last Updated: <span id="storageTime">2025-11-21 01:41:01</span>
     </p>
   </div>
 
@@ -80,7 +80,7 @@ body { font-family: 'Ubuntu', sans-serif; }
     Storage Usage: <span class="text-emerald-300">39%</span>
   </p>
   <p class="mt-2 text-sm text-slate-400">
-    Last Updated: <span id="footerTime">2025-11-21 01:40:29</span>
+    Last Updated: <span id="footerTime">2025-11-21 01:41:01</span>
   </p>
 </div>
 
@@ -89,7 +89,7 @@ body { font-family: 'Ubuntu', sans-serif; }
   const cpu = parseInt("1%".replace('%',''));
   const mem = parseInt("14%".replace('%',''));
   const storage = parseInt("39%".replace('%',''));
-  const timestamp = "2025-11-21 01:40:29";
+  const timestamp = "2025-11-21 01:41:01";
 
   function renderBarChart(id, label, value, color) {
     new Chart(document.getElementById(id), {

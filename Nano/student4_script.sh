@@ -36,6 +36,11 @@ echo "Press [CTRL+C] to stop."
     CPU_PERCENT=$(echo "$CPU_LOAD * 20" | bc | awk '{printf "%.0f", $1}')
     if [ "$CPU_PERCENT" -gt 100 ]; then CPU_PERCENT=100; fi
 
+    # Get Uptime (e.g., "2 days, 4 hours")
+    UPTIME_INFO=$(uptime -p | sed 's/up //')
+
+    # Get OS Version (e.g., "Ubuntu 22.04.3 LTS")
+    OS_VERSION=$(grep "PRETTY_NAME" /etc/os-release | cut -d'"' -f2)
 
     # 2. HANDLE HISTORY LOGGING
     if [ ! -f "$HISTORY_FILE" ]; then touch "$HISTORY_FILE"; fi
@@ -109,6 +114,30 @@ echo "Press [CTRL+C] to stop."
             background-color: var(--matcha-green);
             transition: width 0.5s ease-in-out;
         }
+	
+	.wide-container {
+            width: 100%;
+            max-width: 800px; /* Controls the width of History and System card */
+            background-color: var(--card-bg);
+            padding: 20px;
+            border-radius: 15px;
+            border-top: 4px solid var(--sakura-pink);
+            margin-bottom: 20px;
+            box-sizing: border-box; /* Ensures padding doesn't break width */
+        }
+	
+	.system-info-grid {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .sys-item { text-align: center; }
+        .sys-label { color: var(--text-dim); font-size: 0.8em; display: block; margin-bottom: 5px;}
+        .sys-val { color: var(--sky-blue); font-weight: bold; font-size: 1.1em; }
+
         .history-container {
             width: 100%;
             max-width: 800px;
@@ -125,7 +154,7 @@ echo "Press [CTRL+C] to stop."
     </style>
 </head>
 <body>
-    <h1>🌸 Server Monitor 🍵</h1>
+    <h1> Server Monitor </h1>
     <div class="timestamp">Updated: $TIMESTAMP</div>
     <div class="dashboard-grid">
         <div class="card">
@@ -147,12 +176,26 @@ echo "Press [CTRL+C] to stop."
             <div class="progress-bg"><div class="progress-fill" style="width: ${CPU_PERCENT}%;"></div></div>
         </div>
     </div>
-    <div class="history-container">
+    <div class="wide-container">
         <h3 class="history-title">⏳ Last 5 Updates</h3>
         <table>
             <thead><tr><th>Time</th><th>CPU Load</th><th>RAM %</th><th>Disk %</th></tr></thead>
             <tbody>$HISTORY_ROWS</tbody>
         </table>
+	<div class="wide-container" style="border-top-color: var(--sky-blue);">
+       	 <h3 style="margin-top:0; color:var(--sky-blue);">🖥️ System Overview</h3>
+        
+        <div class="system-info-grid">
+            <div class="sys-item">
+                <span class="sys-label">OS Version</span>
+                <span class="sys-val">$OS_VERSION</span>
+            </div>
+            <div class="sys-item">
+                <span class="sys-label">Uptime</span>
+                <span class="sys-val">$UPTIME_INFO</span>
+            </div>
+	</div>
+      </div>
     </div>
 </body>
 </html>

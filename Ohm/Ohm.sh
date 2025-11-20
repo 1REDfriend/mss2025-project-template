@@ -10,7 +10,7 @@ UPTIME=$(uptime -p)
 HOSTNAME=$(hostname)
 CPU_MODEL=$(lscpu | grep "Model name" | cut -d: -f2 | xargs)
 
-cat <<EOF > student3.html
+cat <<EOF > Ohm.html
 <!DOCTYPE html>
 <html lang="en">
 <head>

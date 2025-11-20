@@ -1,18 +1,13 @@
 #!/bin/bash
+export HOME=/home/sarojphan
 
-# 1. cd เข้า repo ให้ถูกต้อง
+/usr/bin/git config --global --add safe.directory /home/sarojphan/mss2025-project-template
+
 cd /home/sarojphan/mss2025-project-template/Mai
-
-# 2. รัน script update html
 ./student4_script.sh
 
-# 3. กลับขึ้นไป root repo (เพื่อ commit ที่ถูกต้อง)
 cd /home/sarojphan/mss2025-project-template
-
-git checkout Mai
-git add .
-
-git commit -m "Auto Update: $(date '+%Y-%m-%d %H:%M:%S')"
-
-git push origin Mai
+/usr/bin/git add .
+/usr/bin/git commit -m "Auto Update: $(date '+%Y-%m-%d %H:%M:%S')"
+/usr/bin/git push origin Mai
 

@@ -4,59 +4,117 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Tongla Monitoring Dashboard</title>
-    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- นำข้อมูลที่ Shell script สร้าง -->
     <script type="module" src="./Tongla.js"></script>
   </head>
-  <body
-    class="bg-white text-gray-800 min-h-screen flex flex-col items-center justify-center p-6 transition-colors duration-300"
-  >
+  <body class="bg-white text-gray-800 min-h-screen p-6">
     <div
-      class="max-w-4xl w-full bg-white shadow-xl rounded-xl p-8 border border-gray-200 hover:shadow-2xl transition-all duration-300"
+      class="max-w-5xl mx-auto bg-white shadow-xl rounded-2xl p-8 border border-gray-200 hover:shadow-2xl transition-all duration-300"
     >
       <h1
-        class="text-3xl font-bold text-center mb-6 text-indigo-600 animate-pulse"
+        class="text-3xl font-bold text-center mb-8 text-indigo-600 animate-pulse"
       >
         Tongla System Monitor
       </h1>
 
-      <div id="info" class="grid grid-cols-2 gap-6">
-        <div class="col-span-1">
-          <p><strong>User:</strong> <span id="user"></span></p>
-          <p><strong>IP:</strong> <span id="ip"></span></p>
-          <p><strong>OS:</strong> <span id="os"></span></p>
-          <p><strong>Kernel:</strong> <span id="kernel"></span></p>
+      <!-- System info -->
+      <div
+        class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8 transition-transform"
+      >
+        <div
+          class="p-5 rounded-xl border border-gray-100 bg-white hover:bg-gray-50 hover:shadow-md transition"
+        >
+          <p class="text-sm text-gray-500">User</p>
+          <p class="font-semibold" id="user">-</p>
+          <p class="text-sm text-gray-500 mt-3">IP</p>
+          <p class="font-semibold" id="ip">-</p>
+          <p class="text-sm text-gray-500 mt-3">OS</p>
+          <p class="font-semibold" id="os">-</p>
+          <p class="text-sm text-gray-500 mt-3">Kernel</p>
+          <p class="font-semibold" id="kernel">-</p>
         </div>
-        <div class="col-span-1">
-          <p><strong>CPU Usage:</strong> <span id="cpu"></span>%</p>
-          <p>
-            <strong>Memory Usage:</strong>
-            <span id="mem-used"></span> / <span id="mem-total"></span> MB
+
+        <div
+          class="p-5 rounded-xl border border-gray-100 bg-white hover:bg-gray-50 hover:shadow-md transition"
+        >
+          <!-- CPU -->
+          <div class="mb-5">
+            <div class="flex items-center justify-between mb-1">
+              <p class="text-sm text-gray-500">CPU Usage</p>
+              <p class="text-sm font-semibold">
+                <span id="cpu">0.0</span>%
+              </p>
+            </div>
+            <div class="w-full bg-gray-100 rounded-full h-3 overflow-hidden">
+              <div
+                id="cpu-bar"
+                class="h-3 rounded-full bg-indigo-500 transition-all duration-500"
+                style="width: 0%"
+              ></div>
+            </div>
+          </div>
+
+          <!-- Memory -->
+          <div class="mb-5">
+            <div class="flex items-center justify-between mb-1">
+              <p class="text-sm text-gray-500">Memory Usage</p>
+              <p class="text-sm font-semibold">
+                <span id="mem-used">0</span>/<span id="mem-total">0</span> MB
+                (<span id="mem-percent">0</span>%)
+              </p>
+            </div>
+            <div class="w-full bg-gray-100 rounded-full h-3 overflow-hidden">
+              <div
+                id="mem-bar"
+                class="h-3 rounded-full bg-green-500 transition-all duration-500"
+                style="width: 0%"
+              ></div>
+            </div>
+          </div>
+
+          <!-- Storage -->
+          <div>
+            <div class="flex items-center justify-between mb-1">
+              <p class="text-sm text-gray-500">Storage Usage (/)</p>
+              <p class="text-sm font-semibold">
+                <span id="store-used">0</span>/<span id="store-total">0</span> GB
+                (<span id="store-percent">0</span>%)
+              </p>
+            </div>
+            <div class="w-full bg-gray-100 rounded-full h-3 overflow-hidden">
+              <div
+                id="store-bar"
+                class="h-3 rounded-full bg-rose-500 transition-all duration-500"
+                style="width: 0%"
+              ></div>
+            </div>
+          </div>
+
+          <p class="text-xs text-gray-500 mt-4">
+            Last Updated: <span id="updated">-</span>
           </p>
-          <p>
-            <strong>Storage Usage:</strong>
-            <span id="store-used"></span> / <span id="store-total"></span>
-          </p>
-          <p><strong>Last Updated:</strong> <span id="updated"></span></p>
         </div>
       </div>
 
-      <!-- กราฟภาพรวม -->
-      <div class="mt-8">
-        <canvas id="systemChart" class="w-full h-64"></canvas>
+      <!-- Summary Bar Chart -->
+      <div class="mb-8">
+        <h2 class="text-xl font-semibold text-indigo-500 mb-3">
+          Summary Overview
+        </h2>
+        <div class="bg-white border border-gray-100 rounded-xl p-4 shadow-sm">
+          <canvas id="summaryBar" class="w-full h-64"></canvas>
+        </div>
       </div>
 
-      <!-- แสดง process -->
-      <div class="mt-6">
+      <!-- Processes -->
+      <div>
         <h2 class="text-xl font-semibold text-indigo-500 mb-2">
           Top Processes
         </h2>
         <pre
           id="processes"
-          class="bg-gray-100 p-4 rounded-lg text-sm overflow-x-auto shadow-inner"
+          class="bg-gray-50 p-4 rounded-lg text-sm overflow-x-auto shadow-inner border border-gray-100 hover:shadow transition"
         ></pre>
       </div>
     </div>
@@ -64,47 +122,99 @@
     <script type="module">
       import { systemData } from "./Tongla.js";
 
-      document.getElementById("user").textContent = systemData.user;
-      document.getElementById("ip").textContent = systemData.ip;
-      document.getElementById("os").textContent = systemData.os;
-      document.getElementById("kernel").textContent = systemData.kernel;
-      document.getElementById("cpu").textContent =
-        systemData.cpuUsage.toFixed(1);
-      document.getElementById("mem-used").textContent = systemData.memory.used;
-      document.getElementById("mem-total").textContent = systemData.memory.total;
-      document.getElementById("store-used").textContent =
-        systemData.storage.used;
-      document.getElementById("store-total").textContent =
-        systemData.storage.total;
-      document.getElementById("updated").textContent = systemData.lastUpdated;
-      document.getElementById("processes").textContent =
-        systemData.processes.trim();
+      // Fill info
+      const byId = (id) => document.getElementById(id);
+      byId("user").textContent = systemData.user;
+      byId("ip").textContent = systemData.ip;
+      byId("os").textContent = systemData.os;
+      byId("kernel").textContent = systemData.kernel;
 
-      // สร้างกราฟ
-      const ctx = document.getElementById("systemChart");
+      // CPU
+      const cpu = Number(systemData.cpuUsage) || 0;
+      byId("cpu").textContent = cpu.toFixed(1);
+      byId("cpu-bar").style.width = Math.min(100, Math.max(0, cpu)) + "%";
+
+      // Memory
+      const mUsed = Number(systemData.memory.used) || 0;
+      const mTotal = Number(systemData.memory.total) || 0;
+      const mPercent = mTotal > 0 ? (mUsed / mTotal) * 100 : 0;
+      byId("mem-used").textContent = mUsed;
+      byId("mem-total").textContent = mTotal;
+      byId("mem-percent").textContent = mPercent.toFixed(1);
+      byId("mem-bar").style.width =
+        Math.min(100, Math.max(0, mPercent)).toFixed(1) + "%";
+
+      // Storage
+      const sUsed = Number(systemData.storage.usedGB) || 0;
+      const sTotal = Number(systemData.storage.totalGB) || 0;
+      const sPercent =
+        sTotal > 0
+          ? (sUsed / sTotal) * 100
+          : Number(systemData.storage.percent) || 0;
+      byId("store-used").textContent = sUsed.toFixed(2);
+      byId("store-total").textContent = sTotal.toFixed(2);
+      byId("store-percent").textContent = sPercent.toFixed(1);
+      byId("store-bar").style.width =
+        Math.min(100, Math.max(0, sPercent)).toFixed(1) + "%";
+
+      byId("updated").textContent = systemData.lastUpdated;
+      byId("processes").textContent = (systemData.processes || "").trim();
+
+      // Summary Bar Chart
+      const ctx = document.getElementById("summaryBar");
+      const chartData = {
+        labels: ["CPU %", "Memory %", "Storage %"],
+        datasets: [
+          {
+            label: "Usage (%)",
+            data: [cpu, mPercent, sPercent],
+            backgroundColor: [
+              "rgba(99, 102, 241, 0.8)", // indigo
+              "rgba(34, 197, 94, 0.8)", // green
+              "rgba(244, 63, 94, 0.8)", // rose
+            ],
+            borderColor: [
+              "rgba(99, 102, 241, 1)",
+              "rgba(34, 197, 94, 1)",
+              "rgba(244, 63, 94, 1)",
+            ],
+            borderWidth: 1.5,
+            borderRadius: 8,
+            hoverBackgroundColor: [
+              "rgba(99, 102, 241, 0.9)",
+              "rgba(34, 197, 94, 0.9)",
+              "rgba(244, 63, 94, 0.9)",
+            ],
+          },
+        ],
+      };
+
       new Chart(ctx, {
-        type: "doughnut",
-        data: {
-          labels: ["CPU Usage", "Memory Usage", "Storage Usage"],
-          datasets: [
-            {
-              data: [
-                systemData.cpuUsage,
-                (systemData.memory.used / systemData.memory.total) * 100,
-                parseFloat(
-                  (parseInt(systemData.storage.used) /
-                    parseInt(systemData.storage.total)) *
-                    100
-                ) || 0,
-              ],
-              backgroundColor: [
-                "rgba(99, 102, 241, 0.8)",
-                "rgba(34, 197, 94, 0.7)",
-                "rgba(239, 68, 68, 0.7)",
-              ],
-              borderWidth: 2,
+        type: "bar",
+        data: chartData,
+        options: {
+          responsive: true,
+          scales: {
+            y: {
+              beginAtZero: true,
+              max: 100,
+              grid: { color: "rgba(0,0,0,0.05)" },
+              ticks: { callback: (v) => v + "%" },
             },
-          ],
+            x: { grid: { display: false } },
+          },
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label: (item) => ` ${item.formattedValue}%`,
+              },
+            },
+          },
+          animation: {
+            duration: 700,
+            easing: "easeOutQuart",
+          },
         },
       });
     </script>

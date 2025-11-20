@@ -215,46 +215,6 @@
         </div>
       </section>
 
-      <!-- GPU -->
-      <section class="rounded-2xl border border-slate-800 bg-slate-900/70 shadow-lg shadow-slate-900/40 p-4">
-        <h2 class="text-lg font-semibold mb-3">GPU</h2>
-        <div class="space-y-2 text-sm">
-          <div class="flex justify-between">
-            <span class="text-slate-400">Usage (%)</span>
-            <span class="font-mono text-emerald-400">**GPU_USAGE**%</span>
-          </div>
-          <div class="flex justify-between">
-            <span class="text-slate-400">VRAM Used / Total (MiB)</span>
-            <span class="font-mono text-sky-300">
-              **GPU_MEM_USED** / **GPU_MEM_TOTAL**
-            </span>
-          </div>
-        </div>
-
-        <!-- GPU progress bar -->
-        <div class="mt-4">
-          <div class="flex justify-between text-xs text-slate-400 mb-1">
-            <span>GPU Usage</span>
-            <span class="font-mono text-emerald-400">**GPU_USAGE**%</span>
-          </div>
-          <div class="h-2 rounded-full bg-slate-800 overflow-hidden">
-            <div class="h-full bg-emerald-500" style="width: **GPU_USAGE**%;"></div>
-          </div>
-        </div>
-
-        <!-- VRAM bar -->
-        <div class="mt-3">
-          <div class="flex justify-between text-xs text-slate-400 mb-1">
-            <span>VRAM Used</span>
-            <span class="font-mono text-sky-300">**GPU_MEM_USED** / **GPU_MEM_TOTAL** MiB</span>
-          </div>
-          <div class="h-2 rounded-full bg-slate-800 overflow-hidden">
-            <!-- If you want you can replace **GPU_MEM_PCT** with a new metric later -->
-            <div class="h-full bg-sky-500" style="width: **GPU_USAGE**%; opacity: 0.5;"></div>
-          </div>
-        </div>
-      </section>
-
       <!-- Processes / Misc -->
       <section class="rounded-2xl border border-slate-800 bg-slate-900/70 shadow-lg shadow-slate-900/40 p-4">
         <h2 class="text-lg font-semibold mb-3">Processes</h2>

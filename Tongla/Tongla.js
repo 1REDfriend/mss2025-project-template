@@ -6,6 +6,6 @@ const systemStats = {
   cpuUsage: 4.5,
   memoryUsage: 8,
   diskUsage: "38",
-  lastUpdated: "2025-11-20 18:45:02 ICT",
+  lastUpdated: "2025-11-20 18:46:01 ICT",
   processes: [{"pid":25, "name":"kworker/1:0-eve", "cpu":0.2, "mem":0.0},{"pid":1759, "name":"kworker/0:0-eve", "cpu":0.2, "mem":0.0},{"pid":1471, "name":"sshd", "cpu":0.1, "mem":0.1},{"pid":813, "name":"vmtoolsd", "cpu":0.1, "mem":0.2},{"pid":4629, "name":"kworker/u4:0-ev", "cpu":0.0, "mem":0.0}]
 };

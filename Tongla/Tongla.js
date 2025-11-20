@@ -3,20 +3,20 @@ export const systemData = {
   ip: "172.16.36.128",
   os: "Ubuntu 24.04.3 LTS",
   kernel: "6.8.0-87-generic",
-  cpuUsage: 0,
+  cpuUsage: 4.8,
   memory: {
     total: 3902,
-    used: 368
+    used: 366
   },
   storage: {
     totalGB: 18.60,
     usedGB: 6.56,
     percent: 35.29
   },
-  lastUpdated: "2025-11-20 19:44:01 ICT",
+  lastUpdated: "2025-11-20 19:45:01 ICT",
   processes: `
     PID COMMAND         %CPU %MEM
-   8518 vim              1.5  0.3
+   8581 vim              4.1  0.3
      25 kworker/1:0-eve  0.2  0.0
    1759 kworker/0:0-eve  0.2  0.0
     813 vmtoolsd         0.1  0.2

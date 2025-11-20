@@ -3,7 +3,7 @@
 # --- CONFIGURATION ---
 REPO_PATH="/home/nuntawat/mss2025-project-template/Nano"
 BRANCH_NAME="nano"
-HTML_FILE="index.html"
+HTML_FILE="Nano.html"
 HISTORY_FILE="history_data.csv"
 MAX_HISTORY_ENTRIES=5
 # ---------------------

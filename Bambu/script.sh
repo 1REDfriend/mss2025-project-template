@@ -1,4 +1,5 @@
 #!/bin/bash
+cd /home/bambu/mss2025-project-template/Bambu
 
 # ==========================================
 # System Monitor Generator (Sakura Theme)

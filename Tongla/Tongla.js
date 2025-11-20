@@ -6,14 +6,14 @@ export const systemData = {
   cpuUsage: 8.7,
   memory: {
     total: 3902,
-    used: 353
+    used: 360
   },
   storage: {
     totalGB: 18.60,
     usedGB: 6.56,
     percent: 35.29
   },
-  lastUpdated: "2025-11-20 19:12:01 ICT",
+  lastUpdated: "2025-11-20 19:13:02 ICT",
   processes: `
     PID COMMAND         %CPU %MEM
      25 kworker/1:0-eve  0.2  0.0

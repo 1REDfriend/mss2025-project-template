@@ -2,6 +2,8 @@
 # Simple system status -> HTML generator
 # Usage: ./gen_status.sh [template.html] [output.html]
 
+cd  /home/supakorn/git/mas2025-project-template/Tongtong
+
 set -eu
 
 TEMPLATE="${1:-Tongtong_template.html}"

@@ -1,68 +1,3 @@
-#!/bin/bash
-
-# -----------------------------
-# Modern Server Dashboard Generator
-# Collects system information and generates a beautiful HTML dashboard
-# -----------------------------
-
-# Collect System Information
-cpu_usage=$(top -bn1 | grep "Cpu(s)" | awk '{print 100 - $8}' | xargs printf "%.1f")
-mem_total=$(free -m | awk 'NR==2{print $2}')
-mem_used=$(free -m | awk 'NR==2{print $3}')
-mem_percent=$(free -m | awk 'NR==2{printf "%.1f", $3*100/$2}')
-storage_used=$(df -h / | awk 'NR==2{print $3}')
-storage_total=$(df -h / | awk 'NR==2{print $2}')
-storage_percent=$(df -h / | awk 'NR==2{print $5}' | tr -d '%')
-last_updated=$(date "+%Y-%m-%d %H:%M:%S")
-
-hostname=$(hostname)
-uptime_val=$(uptime -p)
-uptime_full=$(uptime)
-
-pkg_count=$(dpkg -l 2>/dev/null | wc -l || echo "N/A")
-
-local_ip=$(hostname -I | awk '{print $1}')
-public_ip=$(curl -s --max-time 3 ifconfig.me || echo "Unavailable")
-
-process_count=$(ps aux | wc -l)
-load_avg=$(cat /proc/loadavg | awk '{print $1", "$2", "$3}')
-
-# CPU Temperature (if sensors installed)
-cpu_temp=$(sensors 2>/dev/null | grep 'Package id 0:' | awk '{print $4}' || sensors 2>/dev/null | grep 'Core 0:' | head -1 | awk '{print $3}' || echo "N/A")
-cpu_temp=${cpu_temp:-"N/A"}
-
-# Determine status based on metrics
-determine_status() {
-  if (( $(echo "$cpu_usage > 95" | bc -l) )) || (( $(echo "$mem_percent > 95" | bc -l) )); then
-    echo "offline"
-  elif (( $(echo "$cpu_usage > 80" | bc -l) )) || (( $(echo "$mem_percent > 80" | bc -l) )); then
-    echo "warning"
-  else
-    echo "online"
-  fi
-}
-
-status=$(determine_status)
-
-if [ "$status" = "online" ]; then
-  status_color="bg-emerald-400"
-  status_text_color="text-emerald-300"
-elif [ "$status" = "warning" ]; then
-  status_color="bg-yellow-400"
-  status_text_color="text-yellow-300"
-else
-  status_color="bg-red-500"
-  status_text_color="text-red-300"
-fi
-
-# Output HTML file (แก้ path ให้ตรง repo ของตัวเองได้)
-output="/home/toby/mss2025-project-template/Toby/Toby.html"
-
-# -----------------------------
-# HTML Template (Tailwind + Glassmorphism + Neon)
-# ใช้ cat <<EOF (ไม่มี ' ) เพื่อให้ bash แทนค่า $variable ให้
-# -----------------------------
-cat <<EOF > "$output"
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -164,7 +99,7 @@ cat <<EOF > "$output"
               System Dashboard
             </h1>
             <p class="text-xs text-slate-400 font-mono mt-1">
-              Host: <span class="text-cyan-300">${hostname}</span>
+              Host: <span class="text-cyan-300">toby</span>
             </p>
           </div>
         </div>
@@ -172,14 +107,14 @@ cat <<EOF > "$output"
         <div class="flex items-center gap-3">
           <div class="hidden sm:flex flex-col items-end text-xs text-slate-400 font-mono">
             <span>Updated at:</span>
-            <span class="text-slate-200">${last_updated}</span>
+            <span class="text-slate-200">2025-11-20 11:30:01</span>
           </div>
           <div class="glass card-shadow rounded-full px-3 py-1.5 flex items-center gap-2">
-            <span class="w-2.5 h-2.5 rounded-full ${status_color} status-pulse-dot animate-pulse-slow"></span>
+            <span class="w-2.5 h-2.5 rounded-full bg-red-500 status-pulse-dot animate-pulse-slow"></span>
             <span class="text-xs font-medium">
               Status:
-              <span class="capitalize ${status_text_color} font-semibold">
-                ${status}
+              <span class="capitalize text-red-300 font-semibold">
+                offline
               </span>
             </span>
           </div>
@@ -202,7 +137,7 @@ cat <<EOF > "$output"
           <div>
             <p class="text-xs text-slate-400 tracking-wide uppercase mb-1">CPU Usage</p>
             <p class="text-3xl font-semibold tracking-tight">
-              <span class="text-cyan-400">${cpu_usage}</span><span class="text-slate-400 text-xl">%</span>
+              <span class="text-cyan-400">100.0</span><span class="text-slate-400 text-xl">%</span>
             </p>
           </div>
           <div
@@ -216,10 +151,10 @@ cat <<EOF > "$output"
         <div class="mt-2">
           <div class="h-1.5 w-full rounded-full bg-slate-800 overflow-hidden">
             <div class="h-full rounded-full bg-gradient-to-r from-cyan-400 via-sky-400 to-indigo-400"
-              style="width: calc(${cpu_usage}%);"></div>
+              style="width: calc(100.0%);"></div>
           </div>
           <p class="text-[11px] text-slate-500 mt-2 font-mono">
-            Load avg: ${load_avg}
+            Load avg: 0.04, 0.01, 0.00
           </p>
         </div>
       </article>
@@ -231,7 +166,7 @@ cat <<EOF > "$output"
           <div>
             <p class="text-xs text-slate-400 tracking-wide uppercase mb-1">Memory</p>
             <p class="text-3xl font-semibold tracking-tight">
-              <span class="text-indigo-400">${mem_percent}</span><span class="text-slate-400 text-xl">%</span>
+              <span class="text-indigo-400">13.9</span><span class="text-slate-400 text-xl">%</span>
             </p>
           </div>
           <div class="p-2 rounded-xl bg-indigo-500/10 text-indigo-300 border border-indigo-400/40">
@@ -242,11 +177,11 @@ cat <<EOF > "$output"
           </div>
         </div>
         <p class="text-[11px] text-slate-400 font-mono">
-          ${mem_used} MB / ${mem_total} MB
+          538 MB / 3868 MB
         </p>
         <div class="mt-2 h-1.5 w-full rounded-full bg-slate-800 overflow-hidden">
           <div class="h-full rounded-full bg-gradient-to-r from-indigo-400 via-violet-400 to-fuchsia-400"
-            style="width: calc(${mem_percent}%);"></div>
+            style="width: calc(13.9%);"></div>
         </div>
       </article>
 
@@ -257,7 +192,7 @@ cat <<EOF > "$output"
           <div>
             <p class="text-xs text-slate-400 tracking-wide uppercase mb-1">Storage</p>
             <p class="text-3xl font-semibold tracking-tight">
-              <span class="text-fuchsia-400">${storage_percent}</span><span class="text-slate-400 text-xl">%</span>
+              <span class="text-fuchsia-400">35</span><span class="text-slate-400 text-xl">%</span>
             </p>
           </div>
           <div class="p-2 rounded-xl bg-fuchsia-500/10 text-fuchsia-300 border border-fuchsia-400/40">
@@ -268,11 +203,11 @@ cat <<EOF > "$output"
           </div>
         </div>
         <p class="text-[11px] text-slate-400 font-mono">
-          ${storage_used} / ${storage_total}
+          6.5G / 20G
         </p>
         <div class="mt-2 h-1.5 w-full rounded-full bg-slate-800 overflow-hidden">
           <div class="h-full rounded-full bg-gradient-to-r from-fuchsia-400 via-pink-400 to-rose-400"
-            style="width: calc(${storage_percent}%);"></div>
+            style="width: calc(35%);"></div>
         </div>
       </article>
 
@@ -283,7 +218,7 @@ cat <<EOF > "$output"
           <div>
             <p class="text-xs text-slate-400 tracking-wide uppercase mb-1">Active Processes</p>
             <p class="text-3xl font-semibold tracking-tight">
-              <span class="text-emerald-400">${process_count}</span>
+              <span class="text-emerald-400">227</span>
             </p>
           </div>
           <div class="p-2 rounded-xl bg-emerald-500/10 text-emerald-300 border border-emerald-400/40">
@@ -294,7 +229,7 @@ cat <<EOF > "$output"
           </div>
         </div>
         <p class="text-[11px] text-slate-400 font-mono">
-          Uptime: ${uptime_val}
+          Uptime: up 2 hours, 53 minutes
         </p>
       </article>
     </section>
@@ -311,47 +246,47 @@ cat <<EOF > "$output"
 
         <div class="flex flex-col gap-1 rounded-xl bg-slate-900/60 border border-slate-700/70 px-3 py-2.5">
           <span class="text-[11px] uppercase tracking-wide text-slate-500">Hostname</span>
-          <span class="font-mono text-slate-100 truncate">${hostname}</span>
+          <span class="font-mono text-slate-100 truncate">toby</span>
         </div>
 
         <div class="flex flex-col gap-1 rounded-xl bg-slate-900/60 border border-slate-700/70 px-3 py-2.5">
           <span class="text-[11px] uppercase tracking-wide text-slate-500">Last Updated</span>
-          <span class="font-mono text-slate-100">${last_updated}</span>
+          <span class="font-mono text-slate-100">2025-11-20 11:30:01</span>
         </div>
 
         <div class="flex flex-col gap-1 rounded-xl bg-slate-900/60 border border-slate-700/70 px-3 py-2.5">
           <span class="text-[11px] uppercase tracking-wide text-slate-500">Uptime (full)</span>
-          <span class="font-mono text-slate-100 truncate">${uptime_full}</span>
+          <span class="font-mono text-slate-100 truncate"> 11:30:01 up  2:53,  4 users,  load average: 0.04, 0.01, 0.00</span>
         </div>
 
         <div class="flex flex-col gap-1 rounded-xl bg-slate-900/60 border border-slate-700/70 px-3 py-2.5">
           <span class="text-[11px] uppercase tracking-wide text-slate-500">Local IP</span>
-          <span class="font-mono text-slate-100">${local_ip}</span>
+          <span class="font-mono text-slate-100">192.168.80.129</span>
         </div>
 
         <div class="flex flex-col gap-1 rounded-xl bg-slate-900/60 border border-slate-700/70 px-3 py-2.5">
           <span class="text-[11px] uppercase tracking-wide text-slate-500">Public IP</span>
-          <span class="font-mono text-slate-100">${public_ip}</span>
+          <span class="font-mono text-slate-100">161.246.72.74</span>
         </div>
 
         <div class="flex flex-col gap-1 rounded-xl bg-slate-900/60 border border-slate-700/70 px-3 py-2.5">
           <span class="text-[11px] uppercase tracking-wide text-slate-500">Installed Packages</span>
-          <span class="font-mono text-slate-100">${pkg_count}</span>
+          <span class="font-mono text-slate-100">685</span>
         </div>
 
         <div class="flex flex-col gap-1 rounded-xl bg-slate-900/60 border border-slate-700/70 px-3 py-2.5">
           <span class="text-[11px] uppercase tracking-wide text-slate-500">Processes</span>
-          <span class="font-mono text-slate-100">${process_count}</span>
+          <span class="font-mono text-slate-100">227</span>
         </div>
 
         <div class="flex flex-col gap-1 rounded-xl bg-slate-900/60 border border-slate-700/70 px-3 py-2.5">
           <span class="text-[11px] uppercase tracking-wide text-slate-500">CPU Temperature</span>
-          <span class="font-mono text-slate-100">${cpu_temp}</span>
+          <span class="font-mono text-slate-100">N/A</span>
         </div>
 
         <div class="flex flex-col gap-1 rounded-xl bg-slate-900/60 border border-slate-700/70 px-3 py-2.5">
           <span class="text-[11px] uppercase tracking-wide text-slate-500">Load Average</span>
-          <span class="font-mono text-slate-100">${load_avg}</span>
+          <span class="font-mono text-slate-100">0.04, 0.01, 0.00</span>
         </div>
 
       </div>
@@ -361,7 +296,7 @@ cat <<EOF > "$output"
     <footer class="relative text-center pt-4">
       <p class="text-[11px] text-slate-500">
         Dashboard generated by <span class="text-cyan-300 font-mono">bash script</span> •
-        <span class="text-slate-300">Last updated: ${last_updated}</span>
+        <span class="text-slate-300">Last updated: 2025-11-20 11:30:01</span>
       </p>
     </footer>
 
@@ -377,7 +312,3 @@ cat <<EOF > "$output"
 
 </body>
 </html>
-EOF
-
-echo "✨ Dashboard generated successfully: $output"
-

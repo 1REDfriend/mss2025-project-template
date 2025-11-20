@@ -1,3 +1,16 @@
+#!/bin/bash
+
+CPU_USAGE=$(top -bn1 | grep "Cpu(s)" | awk '{print 100 - $8}')
+MEM_USAGE=$(free | grep Mem | awk '{print $3/$2 * 100.0}')
+DISK_USAGE=$(df -h / | awk 'NR==2 {print $5}' | sed 's/%//')
+Last_Update=$(date +"%Y-%m-%d %H:%M:%S")
+KERNEL=$(uname -r)
+OS=$(grep PRETTY_NAME /etc/os-release | cut -d= -f2 | tr -d '"')
+UPTIME=$(uptime -p)
+HOSTNAME=$(hostname)
+CPU_MODEL=$(lscpu | grep "Model name" | cut -d: -f2 | sed 's/^[ \t]*//')
+echo "$(CPU_USAGE)"
+cat <<EOF > student3.html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -194,8 +207,8 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>Server Monitor</h1>
-            <div class="subtitle">Real-time System</div>
+            <h1>System Monitor</h1>
+            <div class="subtitle">Real-time System Performance</div>
         </div>
 
         <div class="info-grid">
@@ -203,8 +216,8 @@
                 <div class="info-label">CPU Usage</div>
                 <div class="progress-wrapper">
                     <div class="progress-bar-container">
-                        <div class="progress-bar" style="width: 4.8%"></div>
-                        <div class="progress-text">4.8%</div>
+                        <div class="progress-bar" style="width: ${CPU_USAGE}%"></div>
+                        <div class="progress-text">${CPU_USAGE}%</div>
                     </div>
                 </div>
             </div>
@@ -213,8 +226,8 @@
                 <div class="info-label">Memory Usage</div>
                 <div class="progress-wrapper">
                     <div class="progress-bar-container">
-                        <div class="progress-bar" style="width: 13.1525%"></div>
-                        <div class="progress-text">13.1525%</div>
+                        <div class="progress-bar" style="width: ${MEM_USAGE}%"></div>
+                        <div class="progress-text">${MEM_USAGE}%</div>
                     </div>
                 </div>
             </div>
@@ -223,42 +236,49 @@
                 <div class="info-label">Disk Usage</div>
                 <div class="progress-wrapper">
                     <div class="progress-bar-container">
-                        <div class="progress-bar" style="width: 35%"></div>
-                        <div class="progress-text">35%</div>
+                        <div class="progress-bar" style="width: ${DISK_USAGE}%"></div>
+                        <div class="progress-text">${DISK_USAGE}%</div>
                     </div>
                 </div>
             </div>
 
             <div class="info-card">
                 <div class="info-label">Hostname</div>
-                <div class="info-value">thiarawit</div>
+                <div class="info-value">${HOSTNAME}</div>
             </div>
 
             <div class="info-card">
                 <div class="info-label">Operating System</div>
-                <div class="info-value">Ubuntu 24.04.3 LTS</div>
+                <div class="info-value">${OS}</div>
             </div>
 
             <div class="info-card">
                 <div class="info-label">Kernel Version</div>
-                <div class="info-value">6.8.0-87-generic</div>
+                <div class="info-value">${KERNEL}</div>
             </div>
 
             <div class="info-card">
                 <div class="info-label">Uptime</div>
-                <div class="info-value">up 7 hours, 3 minutes</div>
+                <div class="info-value">${UPTIME}</div>
             </div>
 
             <div class="info-card">
                 <div class="info-label">CPU Model</div>
-                <div class="info-value">12th Gen Intel(R) Core(TM) i7-1255U</div>
+                <div class="info-value">${CPU_MODEL}</div>
             </div>
         </div>
 
         <div class="timestamp">
             <div class="info-label">Last Updated</div>
-            <div class="info-value">2025-11-20 12:10:10</div>
+            <div class="info-value">${Last_Update}</div>
+        </div>
+
+        <div class="footer">
+            Hello World
         </div>
     </div>
 </body>
 </html>
+EOF
+
+

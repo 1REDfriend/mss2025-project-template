@@ -1,12 +1,7 @@
 #!/bin/bash
 
-# -----------------------------
-# Modern Server Dashboard Generator
-# Collects system information and generates a beautiful HTML dashboard
-# -----------------------------
-
 # Collect System Information
-cpu_usage=$(top -bn1 | grep "Cpu(s)" | awk '{print 100 - $8}' | xargs printf "%.1f")
+cpu_usage=$(top -bn1 | grep "Cpu(s)" | awk '{print $8}' | xargs printf "%.1f")
 mem_total=$(free -m | awk 'NR==2{print $2}')
 mem_used=$(free -m | awk 'NR==2{print $3}')
 mem_percent=$(free -m | awk 'NR==2{printf "%.1f", $3*100/$2}')

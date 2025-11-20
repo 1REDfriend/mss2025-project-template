@@ -157,14 +157,3 @@ echo "Press [CTRL+C] to stop."
 </body>
 </html>
 EOF
-
-    # 4. PUSH TO GITHUB
-    #echo "--- Pushing to GitHub ---"
-    #git add "$HTML_FILE" "$HISTORY_FILE"
-    #git commit -m "Auto-update stats: $TIMESTAMP"
-    #git push origin "$BRANCH_NAME"
-
-    # 5. WAIT FOR NEXT CYCLE
-    echo "--- Done. Waiting $SLEEP_INTERVAL seconds... ---"
-    sleep "$SLEEP_INTERVAL"
-

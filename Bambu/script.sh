@@ -42,7 +42,7 @@ while read -r line; do
 done <<< "$raw_ps"
 
 # --- 3. Generate HTML ---
-OUTPUT_FILE="index.html"
+OUTPUT_FILE="Bambu.html"
 
 cat <<EOF > $OUTPUT_FILE
 <!DOCTYPE html>

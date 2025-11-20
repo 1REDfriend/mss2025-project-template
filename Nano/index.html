@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matcha Monitor</title>
+    <style>
+        :root {
+            --bg-color: #2b2b2b;
+            --card-bg: #363636;
+            --matcha-green: #badc58;
+            --sakura-pink: #ff9ff3;
+            --text-main: #f0f0f0;
+            --text-dim: #a0a0a0;
+        }
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Courier New', Courier, monospace;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+        h1 { color: var(--sakura-pink); text-transform: uppercase; letter-spacing: 2px; border-bottom: 2px solid var(--matcha-green); padding-bottom: 10px;}
+        .timestamp { color: var(--matcha-green); margin-bottom: 30px; font-weight: bold; }
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            width: 100%;
+            max-width: 800px;
+            margin-bottom: 30px;
+        }
+        .card {
+            background-color: var(--card-bg);
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            border: 1px solid var(--matcha-green);
+            box-shadow: 0 4px 10px rgba(186, 220, 88, 0.1);
+        }
+        .icon { font-size: 2em; margin-bottom: 10px; display: block; }
+        .stat-value { font-size: 1.8em; font-weight: bold; color: var(--sakura-pink); }
+        .stat-label { color: var(--text-dim); font-size: 0.8em; margin-top: 5px;}
+        .progress-bg {
+            background-color: #555;
+            height: 12px;
+            border-radius: 10px;
+            margin-top: 15px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background-color: var(--matcha-green);
+            transition: width 0.5s ease-in-out;
+        }
+        .history-container {
+            width: 100%;
+            max-width: 800px;
+            background-color: var(--card-bg);
+            padding: 20px;
+            border-radius: 15px;
+            border-top: 4px solid var(--sakura-pink);
+        }
+        .history-title { color: var(--matcha-green); margin-top: 0; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th { text-align: left; color: var(--sakura-pink); border-bottom: 1px solid #555; padding: 10px; }
+        td { padding: 10px; border-bottom: 1px solid #444; color: var(--text-dim); }
+        tr:last-child td { border-bottom: none; }
+    </style>
+</head>
+<body>
+    <h1>🌸 Server Monitor 🍵</h1>
+    <div class="timestamp">Updated: 2025-11-20 12:26:26</div>
+    <div class="dashboard-grid">
+        <div class="card">
+            <span class="icon">🧠</span>
+            <div class="stat-value">13%</div>
+            <div class="stat-label">497/3868MB</div>
+            <div class="progress-bg"><div class="progress-fill" style="width: 13%;"></div></div>
+        </div>
+        <div class="card">
+            <span class="icon">💾</span>
+            <div class="stat-value">28%</div>
+            <div class="stat-label">2/9GB</div>
+            <div class="progress-bg"><div class="progress-fill" style="width: 28%;"></div></div>
+        </div>
+        <div class="card">
+            <span class="icon">⚙️</span>
+            <div class="stat-value">0.00</div>
+            <div class="stat-label">Avg Load</div>
+            <div class="progress-bg"><div class="progress-fill" style="width: 0%;"></div></div>
+        </div>
+    </div>
+    <div class="history-container">
+        <h3 class="history-title">⏳ Last 5 Updates</h3>
+        <table>
+            <thead><tr><th>Time</th><th>CPU Load</th><th>RAM %</th><th>Disk %</th></tr></thead>
+            <tbody><tr><td>12:26</td><td>0.00</td><td>13%</td><td>28%</td></tr><tr><td>12:26</td><td>0.00</td><td>13%</td><td>28%</td></tr><tr><td>12:26</td><td>0.00</td><td>13%</td><td>28%</td></tr><tr><td>12:26</td><td>0.00</td><td>13%</td><td>28%</td></tr><tr><td>12:26</td><td>0.00</td><td>13%</td><td>28%</td></tr></tbody>
+        </table>
+    </div>
+</body>
+</html>

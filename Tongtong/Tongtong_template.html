@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>System Status</title>
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="min-h-screen bg-slate-950 text-slate-100 flex items-center justify-center">
+  <div class="w-full max-w-6xl mx-auto p-6">
+    <!-- Header -->
+    <header class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+      <div>
+        <h1 class="text-3xl font-bold tracking-tight">
+          System Status - <span class="text-emerald-400 font-mono">**HOSTNAME**</span>
+        </h1>
+        <p class="text-sm text-slate-400 mt-1">
+          Last updated: <span class="font-mono text-slate-200">**LAST_UPDATED**</span>
+        </p>
+      </div>
+      <div class="flex flex-wrap gap-2 text-xs font-mono text-slate-300">
+        <span class="px-2 py-1 rounded-full bg-slate-900/60 border border-slate-700">
+          Uptime: <span class="text-emerald-400">**UPTIME**</span>
+        </span>
+        <span class="px-2 py-1 rounded-full bg-slate-900/60 border border-slate-700">
+          Kernel: <span class="text-blue-400">**KERNEL_VERSION**</span>
+        </span>
+        <span class="px-2 py-1 rounded-full bg-slate-900/60 border border-slate-700">
+          Distro: <span class="text-indigo-400">**DISTRO_NAME**</span>
+        </span>
+      </div>
+    </header>
+
+    <!-- Top-wide chart -->
+    <section class="mb-6 rounded-2xl border border-slate-800 bg-slate-900/80 shadow-lg shadow-slate-900/40 p-4">
+      <h2 class="text-lg font-semibold mb-3 flex items-center gap-2">
+        <span class="inline-block w-2 h-2 rounded-full bg-sky-400 animate-pulse"></span>
+        System Usage Overview
+      </h2>
+      <div class="mt-2">
+        <canvas id="usageChart" class="w-full h-48"></canvas>
+        <p class="mt-2 text-xs text-slate-500 font-mono">
+          CPU: **CPU_USAGE**% · RAM: **MEM_USED_PCT**% · Disk: **DISK_ROOT_USED_PCT**% · Swap: **SWAP_USED_PCT**% · GPU: **GPU_USAGE**%
+        </p>
+      </div>
+    </section>
+
+    <!-- Grid -->
+    <main class="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+      <!-- CPU -->
+      <section class="rounded-2xl border border-slate-800 bg-slate-900/70 shadow-lg shadow-slate-900/40 p-4">
+        <h2 class="text-lg font-semibold mb-3 flex items-center gap-2">
+          <span class="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          CPU
+        </h2>
+        <div class="space-y-2 text-sm">
+          <div class="flex justify-between">
+            <span class="text-slate-400">Usage (%)</span>
+            <span class="font-mono text-emerald-400">**CPU_USAGE**%</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-slate-400">Load (1m / 5m / 15m)</span>
+            <span class="font-mono text-sky-300">
+              **CPU_LOAD_1** / **CPU_LOAD_5** / **CPU_LOAD_15**
+            </span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-slate-400">Temperature (°C)</span>
+            <span class="font-mono text-orange-300">**CPU_TEMP**</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-slate-400">Cores / Threads</span>
+            <span class="font-mono text-slate-200">**CPU_CORES** / **CPU_THREADS**</span>
+          </div>
+        </div>
+
+        <!-- CPU progress bar -->
+        <div class="mt-4">
+          <div class="flex justify-between text-xs text-slate-400 mb-1">
+            <span>CPU Usage</span>
+            <span class="font-mono text-emerald-400">**CPU_USAGE**%</span>
+          </div>
+          <div class="h-2 rounded-full bg-slate-800 overflow-hidden">
+            <div class="h-full bg-emerald-500" style="width: **CPU_USAGE**%;"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Memory -->
+      <section class="rounded-2xl border border-slate-800 bg-slate-900/70 shadow-lg shadow-slate-900/40 p-4">
+        <h2 class="text-lg font-semibold mb-3">Memory</h2>
+        <div class="space-y-2 text-sm">
+          <div class="flex justify-between">
+            <span class="text-slate-400">RAM Used / Total (MiB)</span>
+            <span class="font-mono text-violet-300">
+              **MEM_USED** / **MEM_TOTAL**
+            </span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-slate-400">RAM Usage (%)</span>
+            <span class="font-mono text-emerald-400">**MEM_USED_PCT**%</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-slate-400">Swap Used / Total (MiB)</span>
+            <span class="font-mono text-pink-300">
+              **SWAP_USED** / **SWAP_TOTAL**
+            </span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-slate-400">Swap Usage (%)</span>
+            <span class="font-mono text-amber-300">**SWAP_USED_PCT**%</span>
+          </div>
+        </div>
+
+        <!-- RAM progress bar -->
+        <div class="mt-4">
+          <div class="flex justify-between text-xs text-slate-400 mb-1">
+            <span>RAM Usage</span>
+            <span class="font-mono text-emerald-400">**MEM_USED_PCT**%</span>
+          </div>
+          <div class="h-2 rounded-full bg-slate-800 overflow-hidden">
+            <div class="h-full bg-violet-500" style="width: **MEM_USED_PCT**%;"></div>
+          </div>
+        </div>
+
+        <!-- Swap progress bar -->
+        <div class="mt-3">
+          <div class="flex justify-between text-xs text-slate-400 mb-1">
+            <span>Swap Usage</span>
+            <span class="font-mono text-amber-300">**SWAP_USED_PCT**%</span>
+          </div>
+          <div class="h-2 rounded-full bg-slate-800 overflow-hidden">
+            <div class="h-full bg-amber-500" style="width: **SWAP_USED_PCT**%;"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Disk -->
+      <section class="rounded-2xl border border-slate-800 bg-slate-900/70 shadow-lg shadow-slate-900/40 p-4">
+        <h2 class="text-lg font-semibold mb-3">Disk (/)</h2>
+        <div class="space-y-2 text-sm">
+          <div class="flex justify-between">
+            <span class="text-slate-400">Used / Total</span>
+            <span class="font-mono text-sky-300">
+              **DISK_ROOT_USED** / **DISK_ROOT_TOTAL**
+            </span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-slate-400">Usage (%)</span>
+            <span class="font-mono text-emerald-400">**DISK_ROOT_USED_PCT**%</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-slate-400">Inodes Used (%)</span>
+            <span class="font-mono text-fuchsia-300">**DISK_ROOT_INODE_PCT**%</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-slate-400">Main Device</span>
+            <span class="font-mono text-slate-200">**DISK_ROOT_DEVICE**</span>
+          </div>
+        </div>
+
+        <!-- Disk progress bar -->
+        <div class="mt-4">
+          <div class="flex justify-between text-xs text-slate-400 mb-1">
+            <span>Disk Usage</span>
+            <span class="font-mono text-emerald-400">**DISK_ROOT_USED_PCT**%</span>
+          </div>
+          <div class="h-2 rounded-full bg-slate-800 overflow-hidden">
+            <div class="h-full bg-sky-500" style="width: **DISK_ROOT_USED_PCT**%;"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Network -->
+      <section class="rounded-2xl border border-slate-800 bg-slate-900/70 shadow-lg shadow-slate-900/40 p-4">
+        <h2 class="text-lg font-semibold mb-3">Network (**NET_IFACE**)</h2>
+        <div class="space-y-2 text-sm">
+          <div class="flex justify-between">
+            <span class="text-slate-400">IPv4</span>
+            <span class="font-mono text-sky-300">**NET_IPV4**</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-slate-400">IPv6</span>
+            <span class="font-mono text-slate-300">**NET_IPV6**</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-slate-400">RX (MB/s)</span>
+            <span class="font-mono text-emerald-400">**NET_RX_MBPS**</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-slate-400">TX (MB/s)</span>
+            <span class="font-mono text-amber-300">**NET_TX_MBPS**</span>
+          </div>
+        </div>
+
+        <!-- Simple network indicator bars (relative, lightweight visual) -->
+        <div class="mt-4 space-y-3 text-xs text-slate-400">
+          <div>
+            <div class="flex justify-between mb-1">
+              <span>RX Activity</span>
+              <span class="font-mono text-emerald-300">**NET_RX_MBPS** MB/s</span>
+            </div>
+            <div class="h-2 rounded-full bg-slate-800 overflow-hidden">
+              <div class="h-full bg-emerald-500" style="width: 100%; opacity: 0.15;"></div>
+            </div>
+          </div>
+          <div>
+            <div class="flex justify-between mb-1">
+              <span>TX Activity</span>
+              <span class="font-mono text-amber-300">**NET_TX_MBPS** MB/s</span>
+            </div>
+            <div class="h-2 rounded-full bg-slate-800 overflow-hidden">
+              <div class="h-full bg-amber-500" style="width: 100%; opacity: 0.15;"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- GPU -->
+      <section class="rounded-2xl border border-slate-800 bg-slate-900/70 shadow-lg shadow-slate-900/40 p-4">
+        <h2 class="text-lg font-semibold mb-3">GPU</h2>
+        <div class="space-y-2 text-sm">
+          <div class="flex justify-between">
+            <span class="text-slate-400">Model</span>
+            <span class="font-mono text-slate-200">**GPU_NAME**</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-slate-400">Usage (%)</span>
+            <span class="font-mono text-emerald-400">**GPU_USAGE**%</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-slate-400">VRAM Used / Total (MiB)</span>
+            <span class="font-mono text-sky-300">
+              **GPU_MEM_USED** / **GPU_MEM_TOTAL**
+            </span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-slate-400">Temperature (°C)</span>
+            <span class="font-mono text-orange-300">**GPU_TEMP**</span>
+          </div>
+        </div>
+
+        <!-- GPU progress bar -->
+        <div class="mt-4">
+          <div class="flex justify-between text-xs text-slate-400 mb-1">
+            <span>GPU Usage</span>
+            <span class="font-mono text-emerald-400">**GPU_USAGE**%</span>
+          </div>
+          <div class="h-2 rounded-full bg-slate-800 overflow-hidden">
+            <div class="h-full bg-emerald-500" style="width: **GPU_USAGE**%;"></div>
+          </div>
+        </div>
+
+        <!-- VRAM bar -->
+        <div class="mt-3">
+          <div class="flex justify-between text-xs text-slate-400 mb-1">
+            <span>VRAM Used</span>
+            <span class="font-mono text-sky-300">**GPU_MEM_USED** / **GPU_MEM_TOTAL** MiB</span>
+          </div>
+          <div class="h-2 rounded-full bg-slate-800 overflow-hidden">
+            <!-- If you want you can replace **GPU_MEM_PCT** with a new metric later -->
+            <div class="h-full bg-sky-500" style="width: **GPU_USAGE**%; opacity: 0.5;"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Processes / Misc -->
+      <section class="rounded-2xl border border-slate-800 bg-slate-900/70 shadow-lg shadow-slate-900/40 p-4">
+        <h2 class="text-lg font-semibold mb-3">Processes</h2>
+        <div class="space-y-2 text-sm">
+          <div class="flex justify-between">
+            <span class="text-slate-400">Total Processes</span>
+            <span class="font-mono text-slate-200">**PROC_TOTAL**</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-slate-400">Running</span>
+            <span class="font-mono text-emerald-400">**PROC_RUNNING**</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-slate-400">Sleeping</span>
+            <span class="font-mono text-sky-300">**PROC_SLEEPING**</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-slate-400">Top Process</span>
+            <span class="font-mono text-pink-300">
+              **TOP_PROC_NAME** (CPU **TOP_PROC_CPU**% | MEM **TOP_PROC_MEM**%)
+            </span>
+          </div>
+        </div>
+
+        <!-- Simple utilization-style bar based on running vs total -->
+        <div class="mt-4">
+          <div class="flex justify-between text-xs text-slate-400 mb-1">
+            <span>Active vs Total</span>
+            <span class="font-mono text-emerald-300">
+              **PROC_RUNNING** running / **PROC_TOTAL** total
+            </span>
+          </div>
+          <div class="h-2 rounded-full bg-slate-800 overflow-hidden">
+            <!-- This is only visual; if you want real ratio, you can add a new placeholder later -->
+            <div class="h-full bg-emerald-500" style="width: 40%; opacity: 0.6;"></div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="mt-6 text-xs text-slate-500 flex justify-between items-center">
+      <span class="font-mono">
+        Generated on: <span class="text-slate-300">**GEN_TIMESTAMP**</span>
+      </span>
+      <span class="font-mono">
+        Host ID: <span class="text-slate-300">**HOST_ID**</span>
+      </span>
+    </footer>
+  </div>
+
+  <!-- Chart init: uses the placeholders as numbers -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      var canvas = document.getElementById('usageChart');
+      if (!canvas || typeof Chart === 'undefined') return;
+
+      var cpu  = Number("**CPU_USAGE**");
+      var ram  = Number("**MEM_USED_PCT**");
+      var disk = Number("**DISK_ROOT_USED_PCT**");
+      var swap = Number("**SWAP_USED_PCT**");
+      var gpu  = Number("**GPU_USAGE**");
+
+      new Chart(canvas, {
+        type: 'bar',
+        data: {
+          labels: ['CPU', 'RAM', 'Disk', 'Swap', 'GPU'],
+          datasets: [{
+            label: 'Usage (%)',
+            data: [cpu, ram, disk, swap, gpu],
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { display: false },
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              max: 100,
+              ticks: {
+                stepSize: 20
+              }
+            }
+          }
+        }
+      });
+    });
+  </script>
+</body>
+</html>
+

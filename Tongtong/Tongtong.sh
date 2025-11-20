@@ -48,17 +48,6 @@ else
     CPU_USAGE=$(awk "BEGIN { printf \"%.1f\", (1-($idle_diff/$total_diff))*100 }")
 fi
 
-# CPU temp (best-effort)
-if command -v sensors >/dev/null 2>&1; then
-    CPU_TEMP=$(sensors 2>/dev/null | awk '
-        /Tctl:|Tdie:|Package id 0:|Tctl/ {
-          if (match($0, /([0-9]+\.[0-9]+)/, a)) { print a[1]; exit }
-        }' )
-    [ -n "${CPU_TEMP:-}" ] || CPU_TEMP="N/A"
-else
-    CPU_TEMP="N/A"
-fi
-
 # ---------- Memory ----------
 if command -v free >/dev/null 2>&1; then
     MEM_USED=$(free -m | awk '/^Mem:/ {print $3}')
@@ -120,21 +109,6 @@ if [ -n "$NET_IFACE" ]; then
     NET_TX_MBPS=$(awk "BEGIN { printf \"%.2f\", ($TX_DIFF/1024/1024)/0.5 }")
 fi
 
-# ---------- GPU (NVIDIA only, best-effort) ----------
-if command -v nvidia-smi >/dev/null 2>&1; then
-    GPU_NAME=$(nvidia-smi --query-gpu=name --format=csv,noheader 2>/dev/null | head -n1 || echo "NVIDIA GPU")
-    GPU_USAGE=$(nvidia-smi --query-gpu=utilization.gpu --format=csv,noheader,nounits 2>/dev/null | head -n1 || echo "0")
-    GPU_MEM_USED=$(nvidia-smi --query-gpu=memory.used --format=csv,noheader,nounits 2>/dev/null | head -n1 || echo "0")
-    GPU_MEM_TOTAL=$(nvidia-smi --query-gpu=memory.total --format=csv,noheader,nounits 2>/dev/null | head -n1 || echo "0")
-    GPU_TEMP=$(nvidia-smi --query-gpu=temperature.gpu --format=csv,noheader,nounits 2>/dev/null | head -n1 || echo "0")
-else
-    GPU_NAME="N/A"
-    GPU_USAGE="0"
-    GPU_MEM_USED="0"
-    GPU_MEM_TOTAL="0"
-    GPU_TEMP="N/A"
-fi
-
 # ---------- Processes ----------
 PROC_TOTAL=$(ps -e --no-headers 2>/dev/null | wc -l | tr -d ' ' || echo 0)
 
@@ -175,7 +149,6 @@ s|\*\*CPU_USAGE\*\*|$CPU_USAGE|g
 s|\*\*CPU_LOAD_1\*\*|$CPU_LOAD_1|g
 s|\*\*CPU_LOAD_5\*\*|$CPU_LOAD_5|g
 s|\*\*CPU_LOAD_15\*\*|$CPU_LOAD_15|g
-s|\*\*CPU_TEMP\*\*|$CPU_TEMP|g
 s|\*\*CPU_CORES\*\*|$CPU_CORES|g
 s|\*\*CPU_THREADS\*\*|$CPU_THREADS|g
 
@@ -198,12 +171,6 @@ s|\*\*NET_IPV6\*\*|$NET_IPV6|g
 s|\*\*NET_RX_MBPS\*\*|$NET_RX_MBPS|g
 s|\*\*NET_TX_MBPS\*\*|$NET_TX_MBPS|g
 
-s|\*\*GPU_NAME\*\*|$GPU_NAME|g
-s|\*\*GPU_USAGE\*\*|$GPU_USAGE|g
-s|\*\*GPU_MEM_USED\*\*|$GPU_MEM_USED|g
-s|\*\*GPU_MEM_TOTAL\*\*|$GPU_MEM_TOTAL|g
-s|\*\*GPU_TEMP\*\*|$GPU_TEMP|g
-
 s|\*\*PROC_TOTAL\*\*|$PROC_TOTAL|g
 s|\*\*PROC_RUNNING\*\*|$PROC_RUNNING|g
 s|\*\*PROC_SLEEPING\*\*|$PROC_SLEEPING|g
@@ -217,4 +184,3 @@ sed -f "$SED_FILE" "$TEMPLATE" > "$OUTPUT"
 rm -f "$SED_FILE"
 
 echo "Generated: $OUTPUT"
-

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="refresh" content="10">
+<title>Server Status Dashboard</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background: #fafafa; color: #262626; padding: 2rem; line-height: 1.6; }
+.container { max-width: 1200px; margin: 0 auto; }
+.header { margin-bottom: 3rem; padding-bottom: 1.5rem; border-bottom: 1px solid #e5e5e5; }
+.header h1 { font-size: 2.5rem; font-weight: 700; color: #171717; margin-bottom: 0.5rem; }
+.header p { font-size: 1rem; color: #737373; }
+.metrics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
+.metric-card { background: white; border: 1px solid #e5e5e5; border-radius: 12px; padding: 1.5rem; transition: all 0.3s ease; }
+.metric-card:hover { box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); transform: translateY(-2px); }
+.metric-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.25rem; }
+.metric-label { font-size: 1.125rem; font-weight: 600; color: #171717; margin-bottom: 0.25rem; }
+.metric-description { font-size: 0.875rem; color: #737373; }
+.metric-value { font-size: 2rem; font-weight: 700; color: #171717; line-height: 1; }
+.metric-status { font-size: 0.75rem; font-weight: 600; margin-top: 0.5rem; text-transform: uppercase; letter-spacing: 0.05em; }
+.status-normal { color: #16a34a; }
+.status-warning { color: #ea580c; }
+.status-critical { color: #dc2626; }
+.progress-bar { width: 100%; height: 12px; background: #f5f5f5; border-radius: 9999px; overflow: hidden; position: relative; }
+.progress-fill { height: 100%; border-radius: 9999px; transition: width 0.7s cubic-bezier(0.4, 0, 0.2, 1); position: relative; }
+.progress-cpu { background: #10b981; }
+.progress-memory { background: #8b5cf6; }
+.progress-disk { background: #22c55e; }
+.system-info { background: white; border: 1px solid #e5e5e5; border-radius: 12px; padding: 1.5rem; margin-bottom: 2rem; }
+.system-info h2 { font-size: 1.25rem; font-weight: 600; color: #171717; margin-bottom: 1.5rem; }
+.info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; }
+.info-item { display: flex; flex-direction: column; gap: 0.5rem; }
+.info-label { font-size: 0.75rem; font-weight: 600; color: #737373; text-transform: uppercase; letter-spacing: 0.05em; }
+.info-value { font-size: 0.875rem; font-weight: 500; color: #171717; }
+.footer { text-align: center; padding: 1.5rem; color: #737373; font-size: 0.875rem; }
+@media (max-width: 768px) { body { padding: 1rem; } .header h1 { font-size: 1.875rem; } .metrics-grid { grid-template-columns: 1fr; } .info-grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1>Server Status Dashboard</h1>
+    <p>Real-time monitoring and system metrics</p>
+  </div>
+
+  <div class="metrics-grid">
+    <!-- CPU Metric -->
+    <div class="metric-card">
+      <div class="metric-header">
+        <div><div class="metric-label">CPU Usage</div></div>
+        <div style="text-align: right;">
+          <div class="metric-value">9%</div>
+          <div class="metric-status status-normal">Normal</div>
+        </div>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill progress-cpu" style="width: 9%"></div>
+      </div>
+    </div>
+
+    <!-- Memory Metric -->
+    <div class="metric-card">
+      <div class="metric-header">
+        <div>
+          <div class="metric-label">Memory Usage</div>
+          <div class="metric-description">521 MB / 3868 MB</div>
+        </div>
+        <div style="text-align: right;">
+          <div class="metric-value">13%</div>
+          <div class="metric-status status-normal">Normal</div>
+        </div>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill progress-memory" style="width: 13%"></div>
+      </div>
+    </div>
+
+    <!-- Disk Metric -->
+    <div class="metric-card">
+      <div class="metric-header">
+        <div>
+          <div class="metric-label">Disk Usage</div>
+          <div class="metric-description">6.5G / 20G</div>
+        </div>
+        <div style="text-align: right;">
+          <div class="metric-value">35%</div>
+          <div class="metric-status status-warning">Medium</div>
+        </div>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill progress-disk" style="width: 35%"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="system-info">
+    <h2>System Information</h2>
+    <div class="info-grid">
+      <div class="info-item"><div class="info-label">Operating System</div><div class="info-value">Ubuntu 24.04.3 LTS</div></div>
+      <div class="info-item"><div class="info-label">Hostname</div><div class="info-value">pitch</div></div>
+      <div class="info-item"><div class="info-label">Kernel</div><div class="info-value">Linux 6.8.0-87-generic</div></div>
+      <div class="info-item"><div class="info-label">Architecture</div><div class="info-value">x86-64</div></div>
+      <div class="info-item"><div class="info-label">Uptime</div><div class="info-value">up 5 hours, 33 minutes</div></div>
+      <div class="info-item"><div class="info-label">Load Average</div><div class="info-value"> 0.00, 0.00, 0.00</div></div>
+    </div>
+  </div>
+
+  <div class="footer">Last updated: 2025-11-20 11:12:14</div>
+</div>
+</body>
+</html>

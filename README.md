@@ -1,109 +1,107 @@
-# Demo Project: Missing Semester 2025 (Live Server Stats)
+# System Monitoring Scripts Collection Analysis
 
-This repository is a demo project for junior students. The goal is to build a system that automatically monitors and displays the resource usage of an **Ubuntu Server** on a public **GitHub Pages** website.
+เอกสารฉบับนี้จัดทำขึ้นเพื่อรวบรวม วิเคราะห์ และสรุปผลการทำงานของ Shell Scripts สำหรับการตรวจสอบสถานะระบบ (System Monitoring) จำนวน 8 ไฟล์ โดยแต่ละสคริปต์มีระเบียบวิธี (Methodology) ในการดึงข้อมูล การประมวลผล และการแสดงผลที่แตกต่างกัน ดังรายละเอียดต่อไปนี้
 
-## 📝 Project Overview
-This is a group project (7-8 members) that combines several key infrastructure concepts:
+---
 
-* **Virtualization:** You will use two VMs: an **Ubuntu Desktop** (as your client machine) and an **Ubuntu Server** (as your target machine).
-* **Remote Connectivity:** Students will use the **Desktop VM** to **SSH** into the **Server VM**, where all work will be done.
-* **Shell Scripting:** You will write a **BASH script** to collect system resource information (CPU usage, memory usage, storage, etc.) from the **Ubuntu Server**.
-* **Git Automation (Branching):** Instead of pushing directly to `main`, your shell script will be responsible for committing changes and pushing them to **your own individual branch** (e.g., `member-1-stats`).
-* **CI/CD & Automation:** TAs have provided a **GitHub Actions workflow** (`auto_merge.yaml`). Once all members have their scripts running, this workflow will automatically merge all individual branches into the `main` branch every 10 minutes.
-* **GitHub Pages:** The repository is configured to host a static website. The `main` branch will update the live site with the combined data from all members.
+## 1. Tongtong.sh
+**ผู้พัฒนา/โปรเจกต์:** Tongtong
+**รูปแบบการทำงาน:** Template-based HTML Generation (Injection)
 
-## ⚙️ How It Works (The Workflow)
+สคริปต์นี้มีความซับซ้อนสูงสุดในกลุ่ม โดยเน้นความแม่นยำของการคำนวณทรัพยากรในระดับ Kernel
+* **Data Acquisition (การได้มาซึ่งข้อมูล):** ไม่ได้พึ่งพาคำสั่งสำเร็จรูปเพียงอย่างเดียว แต่มีการอ่านค่าจาก `/proc/stat` โดยตรงเพื่อคำนวณ CPU Usage แบบ Real-time โดยการ Sampling ข้อมูล 2 ช่วงเวลา (Time slicing) มาหาผลต่างเพื่อคำนวณเปอร์เซ็นต์การใช้งานที่แม่นยำกว่า `top`
+* **Network Metrics:** มีการคำนวณ Throughput (RX/TX metrics) โดยอ่านจาก `/sys/class/net/` และคำนวณอัตราการถ่ายโอนข้อมูลเป็น Mbps
+* **Processing Logic:** ใช้ `sed` script ขั้นสูงในการแทนค่าตัวแปร (Placeholders) ในไฟล์ Template แยกต่างหาก (`Tongtong_template.html`) ช่วยให้โค้ดส่วน Logic และส่วน View แยกออกจากกันอย่างชัดเจน (Separation of Concerns)
 
-1.  **Fork & Clone:** The group forks this template repository.
-2.  **Individual Work:** Each member works on their own dedicated **branch** (do not push to `main` directly).
-3.  **The Script:** Your **BASH script** runs via `cron` on your server. It updates your specific HTML/Data file and pushes the changes to your **individual branch**.
-4.  **The Merge:** The `auto_merge.yaml` workflow runs automatically every 10 minutes. It collects the updates from everyone's branches and merges them into `main`.
-5.  **The Result:** **GitHub Pages** sees the update on `main` and publishes the new stats to the live website.
+---
 
-## 🏁 The Final Product
-The **GitHub Pages** site will feature:
+## 2. Tongla.sh
+**ผู้พัฒนา/โปรเจกต์:** Tongla
+**รูปแบบการทำงาน:** Data Serialization (ES6 Module Export)
 
-* A **Main Group Page** (`index.html`) that links to everyone's profiles.
-* **Individual Pages** for each group member, displaying real-time system stats pulled from their respective **Ubuntu Servers**.
-___
-# โปรเจกต์สาธิต: Missing Semester 2025 (Live Server Stats)
+มีความแตกต่างจากสคริปต์อื่นอย่างมีนัยสำคัญ โดยไม่ได้สร้างไฟล์ HTML เพื่อแสดงผลโดยตรง แต่ทำหน้าที่เป็น **Backend Data Provider**
+* **Data Format:** ผลลัพธ์ถูกเขียนให้อยู่ในรูปแบบ JavaScript Object (`export const systemData`) ซึ่งเอื้อต่อการนำไปใช้งานต่อในฝั่ง Client-side (Modern Web Application)
+* **Calculation:** มีการแปลงหน่วย Storage จาก KB เป็น GB และคำนวณร้อยละ (Percentage) ผ่าน `awk` เพื่อให้ข้อมูลมีความพร้อมใช้งานทันทีโดยไม่ต้องประมวลผลซ้ำที่ฝั่ง Frontend
+* **Timestamp:** มีการกำหนด Timezone เป็น `Asia/Bangkok` อย่างชัดเจนเพื่อความถูกต้องของเวลาท้องถิ่น
 
-Repository นี้เป็นโปรเจกต์สาธิตสำหรับนักศึกษาชั้นปีที่ 1 เป้าหมายคือการสร้างระบบที่ตรวจสอบและแสดงผลการใช้งาน Resource ของ **Ubuntu Server** บนเว็บไซต์สาธารณะผ่าน **GitHub Pages** แบบอัตโนมัติ
+---
 
-## 📝 ภาพรวมโปรเจกต์
-นี่คือโปรเจกต์กลุ่ม (สมาชิก 7-8 คน) ที่รวมแนวคิดพื้นฐานด้าน Infrastructure ที่สำคัญเข้าด้วยกัน:
+## 3. student4_script.sh
+**ผู้พัฒนา/โปรเจกต์:** Mai
+**รูปแบบการทำงาน:** Simple Template Replacement
 
-* **Virtualization:** คุณจะใช้ **VMs** 2 ตัว ได้แก่ **Ubuntu Desktop** (เครื่อง Client) และ **Ubuntu Server** (เครื่องเป้าหมาย)
-* **Remote Connectivity:** นักศึกษาจะใช้ **Desktop VM** เพื่อ **SSH** เข้าไปยัง **Server VM** ซึ่งงานทั้งหมดจะทำที่นั่น
-* **Shell Scripting:** คุณต้องเขียน **BASH script** เพื่อรวบรวมข้อมูลทรัพยากรระบบ (CPU usage, memory, storage ฯลฯ) จาก **Ubuntu Server**
-* **Git Automation (Branching):** แทนที่จะ Push เข้า `main` โดยตรง สคริปต์ของคุณจะทำการ Commit และ Push การเปลี่ยนแปลงไปยัง **Branch ส่วนตัวของคุณ** (เช่น `member-1-stats`)
-* **CI/CD & Automation:** พี่ TA ได้เตรียม **GitHub Actions workflow** (`auto_merge.yaml`) ไว้ให้ เมื่อสมาชิกทุกคนรันสคริปต์เสร็จแล้ว Workflow นี้จะทำการ Merge ทุก Branch เข้าสู่ `main` ให้โดยอัตโนมัติทุกๆ 10 นาที
-* **GitHub Pages:** Repository นี้ถูกตั้งค่าให้โฮสต์ Static Website โดย Branch `main` จะอัปเดตหน้าเว็บจริงด้วยข้อมูลที่รวมมาจากสมาชิกทุกคน
+มุ่งเน้นการตรวจสอบข้อมูลเชิงปริมาณของไฟล์ในระบบ (File System Metrics)
+* **Directory Traversal:** ใช้คำสั่ง `find` ร่วมกับ `wc -l` เพื่อนับจำนวน Directory และไฟล์นามสกุล `.txt` ซึ่งเป็นการตรวจสอบเฉพาะทาง (Specific Monitoring)
+* **Resource Calculation:** ใช้การคำนวณเลขจำนวนเต็ม (Integer Arithmetic) ผ่าน `awk` สำหรับ CPU และ Memory
+* **Templating:** ใช้เทคนิค `sed` แบบพื้นฐานในการแทนค่าในไฟล์ `template.html` โดยเน้นความเรียบง่ายและรวดเร็ว
 
-## ⚙️ ขั้นตอนการทำงาน (The Workflow)
+---
 
-1.  **Fork & Clone:** กลุ่มทำการ Fork Template Repository นี้
-2.  **Individual Work:** สมาชิกแต่ละคนทำงานใน **Branch** ของตัวเอง (ห้าม Push เข้า `main` โดยตรง)
-3.  **The Script:** **BASH script** จะรันผ่าน `cron` บน Server ของคุณ เพื่ออัปเดตไฟล์และ Push ไปยัง **Branch ส่วนตัว**
-4.  **The Merge:** ไฟล์ `auto_merge.yaml` จะทำงานอัตโนมัติทุก 10 นาที เพื่อรวบรวมอัปเดตจาก Branch ของทุกคนและ Merge เข้า `main`
-5.  **The Result:** **GitHub Pages** ตรวจพบการอัปเดตบน `main` และแสดงผลสถิติใหม่บนหน้าเว็บ
+## 4. test.sh
+**ผู้พัฒนา/โปรเจกต์:** Pitch
+**รูปแบบการทำงาน:** Standalone HTML Generator with Conditional Logic
 
-## 🏁 ผลลัพธ์สุดท้าย
-เว็บไซต์บน **GitHub Pages** จะประกอบด้วย:
-* **หน้าหลักของกลุ่ม** (`index.html`) ที่มีลิงก์ไปยังโปรไฟล์ของทุกคน
-* **หน้าส่วนตัว** ของสมาชิกแต่ละคน ที่แสดงสถิติ System Stats แบบ Real-time ที่ดึงมาจาก **Ubuntu Server** ของคนนั้นๆ
-___
-# Projet Démo : Missing Semester 2025 (Live Server Stats)
+จุดเด่นคือการฝังตรรกะเพื่อประเมินสถานะความเสี่ยง (Risk Assessment Logic)
+* **Conditional Styling:** มีอัลกอริทึมในการตรวจสอบค่า Threshold (เกณฑ์) ของ CPU, Memory และ Disk หากค่าเกินกำหนด (เช่น > 80%) ระบบจะเปลี่ยน Class ของ CSS เป็น `status-warning` หรือ `status-critical` โดยอัตโนมัติ
+* **Embedded Visualization:** สร้างไฟล์ HTML แบบ Standalone ที่ฝัง CSS ไว้ภายใน (Internal CSS) พร้อม Progress Bar ที่ปรับความกว้างตามค่าตัวแปรที่ได้จาก Shell Script
+* **Auto-Refresh:** มีการฝัง Meta Tag `refresh` ให้หน้ารีโหลดทุก 10 วินาที
 
-Ce **repository** est un projet de démonstration pour les étudiants juniors. L'objectif est de construire un système qui surveille et affiche automatiquement l'utilisation des ressources d'un **Ubuntu Server** sur un site web public via **GitHub Pages**.
+---
 
-## 📝 Aperçu du Projet
-Il s'agit d'un projet de groupe (7-8 membres) combinant plusieurs concepts clés d'infrastructure :
+## 5. script.sh
+**ผู้พัฒนา/โปรเจกต์:** Bambu (Sakura Theme)
+**รูปแบบการทำงาน:** Dynamic HTML Table Generation
 
-* **Virtualization :** Vous utiliserez deux **VMs** : un **Ubuntu Desktop** (machine client) et un **Ubuntu Server** (machine cible).
-* **Remote Connectivity :** Les étudiants utiliseront la **VM Desktop** pour se connecter via **SSH** à la **VM Server**, où tout le travail sera effectué.
-* **Shell Scripting :** Vous écrirez un **BASH script** pour collecter les informations sur les ressources système (CPU, mémoire, stockage, etc.) de l'**Ubuntu Server**.
-* **Git Automation (Branching) :** Au lieu de pousser directement vers `main`, votre script sera responsable de valider (commit) et de pousser les changements vers **votre propre branch individuel** (ex : `member-1-stats`).
-* **CI/CD & Automation :** Les assistants (TAs) ont fourni un **GitHub Actions workflow** (`auto_merge.yaml`). Une fois que tous les scripts des membres sont opérationnels, ce workflow fusionnera (merge) automatiquement toutes les branches individuelles dans la branch `main` toutes les 10 minutes.
-* **GitHub Pages :** Le repository est configuré pour héberger un site statique. La branch `main` mettra à jour le site en direct avec les données combinées.
+เน้นการวนซ้ำเพื่อสร้างโครงสร้างข้อมูล (Looping & Iteration)
+* **Process Parsing:** ใช้ `ps` command เรียงลำดับ Process ตาม CPU usage จากนั้นใช้ `while read loop` เพื่อดึงข้อมูลทีละบรรทัดและสร้าง HTML Table Row (`<tr>`) แบบไดนามิก
+* **Aesthetic Engineering:** มีการใช้ CSS Variables (`:root`) ในการจัดการ Theme สี (Sakura Theme) ซึ่งแสดงให้เห็นถึงความใส่ใจใน User Interface (UI) ภายในสคริปต์ Bash
+* **String Manipulation:** ใช้การต่อสตริง (String Concatenation) เพื่อรวมแถวของตารางก่อนเขียนลงไฟล์ HTML
 
-## ⚙️ Fonctionnement (The Workflow)
+---
 
-1.  **Fork & Clone :** Le groupe fork ce template repository.
-2.  **Individual Work :** Chaque membre travaille sur son propre **branch** dédié (ne pas pousser directement sur `main`).
-3.  **The Script :** Votre **BASH script** s'exécute via `cron` sur votre serveur. Il met à jour vos fichiers et les pousse vers votre **branch individuel**.
-4.  **The Merge :** Le workflow `auto_merge.yaml` s'exécute automatiquement toutes les 10 minutes. Il collecte les mises à jour de toutes les branches et les fusionne dans `main`.
-5.  **The Result :** **GitHub Pages** détecte la mise à jour sur `main` et publie les nouvelles statistiques sur le site web.
+## 6. student4_script (1).sh
+**ผู้พัฒนา/โปรเจกต์:** Nano (Matcha Monitor)
+**รูปแบบการทำงาน:** Daemon-like Process & Data Persistence
 
-## 🏁 Le Produit Final
-Le site **GitHub Pages** comportera :
-* Une **Page Principale de Groupe** (`index.html`) avec des liens vers les profils de chacun.
-* Des **Pages Individuelles** pour chaque membre, affichant les stats système en temps réel tirées de leurs **Ubuntu Servers** respectifs.
-___
-# デモプロジェクト：Missing Semester 2025 (Live Server Stats)
+เป็นสคริปต์เดียวที่มีพฤติกรรมแบบ **Service/Daemon** และมีการเก็บประวัติข้อมูล (History Logging)
+* **Infinite Loop:** ทำงานภายใต้ `while true` loop (หรือโครงสร้างที่คล้ายกันในทางปฏิบัติ) เพื่ออัปเดตข้อมูลตลอดเวลาโดยไม่ต้องรันใหม่
+* **Data Persistence:** มีการเขียนข้อมูลลงไฟล์ CSV (`history_data.csv`) และใช้คำสั่ง `tail` เพื่อจำกัดขนาดไฟล์ (Log Rotation) ให้เหลือเพียง 5 รายการล่าสุด เพื่อนำมาแสดงผลเป็นกราฟหรือตารางย้อนหลัง
+* **Variable Expansion:** ใช้ `bc` ในการคำนวณทศนิยมสำหรับ CPU Load ซึ่งให้ความละเอียดมากกว่า Integer calculation ทั่วไป
 
-この **Repository** は、後輩学生向けのデモプロジェクトです。目標は、**Ubuntu Server** のリソース使用状況を自動的に監視し、**GitHub Pages** 上の公開ウェブサイトに表示するシステムを構築することです。
+---
 
-## 📝 プロジェクト概要
-これは、いくつかの重要なインフラ概念を組み合わせたグループプロジェクト（4〜5名）です：
+## 7. Ohm.sh
+**ผู้พัฒนา/โปรเจกต์:** Ohm
+**รูปแบบการทำงาน:** Hardware Info & CSS Visualization
 
-* **Virtualization:** 2つの **VM** を使用します：**Ubuntu Desktop**（クライアントマシン）と **Ubuntu Server**（ターゲットマシン）。
-* **Remote Connectivity:** 学生は **Desktop VM** を使用して **Server VM** に **SSH** 接続し、そこで全ての作業を行います。
-* **Shell Scripting:** **Ubuntu Server** からシステムリソース情報（CPU使用率、メモリ、ストレージなど）を収集するための **BASH script** を作成します。
-* **Git Automation (Branching):** 直接 `main` に Push するのではなく、スクリプトは変更をコミットし、**個人の Branch**（例：`member-1-stats`）に Push します。
-* **CI/CD & Automation:** TA が **GitHub Actions workflow** (`auto_merge.yaml`) を用意しました。全員のスクリプトが稼働すると、この Workflow が10分ごとに全ての Branch を `main` に自動的に Merge します。
-* **GitHub Pages:** この Repository は静的ウェブサイトをホストするように設定されています。`main` Branch は全員のデータを結合してサイトを更新します。
+เน้นการดึงข้อมูลฮาร์ดแวร์และการแสดงผลแบบ Modern UI
+* **Hardware Introspection:** ใช้คำสั่ง `lscpu` และ `grep` เพื่อดึงชื่อรุ่นของ CPU (Model Name) และ Kernel Version
+* **CSS Integration:** ใช้เทคนิค CSS Gradient และ Progress bar ที่ซับซ้อนกว่าสคริปต์พื้นฐาน ฝังอยู่ใน `cat <<EOF`
+* **Execution Flow:** เป็นการทำงานแบบ Linear (Sequential Execution) คือ อ่านค่า -> กำหนดตัวแปร -> เขียนไฟล์ HTML ทับไฟล์เดิม
 
-## ⚙️ 仕組み (The Workflow)
+---
 
-1.  **Fork & Clone:** グループはこのテンプレート Repository を Fork します。
-2.  **Individual Work:** 各メンバーは専用の **Branch** で作業します（`main` に直接 Push しないでください）。
-3.  **The Script:** **BASH script** はサーバー上の `cron` 経由で実行されます。ファイルを更新し、**個人の Branch** に Push します。
-4.  **The Merge:** `auto_merge.yaml` ワークフローは10分ごとに自動実行されます。全員の Branch から更新を収集し、`main` に Merge します。
-5.  **The Result:** **GitHub Pages** は `main` の更新を検知し、新しい統計情報をウェブサイトに公開します。
+## 8. student2_script.sh
+**ผู้พัฒนา/โปรเจกต์:** Toby
+**รูปแบบการทำงาน:** Advanced Dashboard with External Dependencies
 
-## 🏁 最終成果物
-**GitHub Pages** サイトには以下が含まれます：
-* 全員のプロフィールへのリンクがある **メイングループページ** (`index.html`)。
-* 各メンバーの **Ubuntu Server** から取得したリアルタイムのシステム統計を表示する **個別ページ**。
-<img width="472" height="410" alt="image" src="https://github.com/user-attachments/assets/eb280e77-f5d8-4916-bf37-827e8da7b5b5" />
+เป็นสคริปต์ที่มีความทันสมัยและซับซ้อนที่สุดในแง่ของการบูรณาการระบบ (System Integration)
+* **External APIs:** มีการเรียกใช้ `curl ifconfig.me` เพื่อดึง Public IP Address ซึ่งเป็นการตรวจสอบ Network ภายนอก
+* **Hardware Sensors:** พยายามอ่านค่าอุณหภูมิ CPU ผ่าน `sensors` (lm-sensors package) ซึ่งเป็นการเข้าถึง Hardware Monitoring ขั้นสูง
+* **Algorithmic Status:** มีฟังก์ชัน `determine_status()` เพื่อคำนวณสถานะรวมของระบบ (Online/Warning/Offline) ตามเงื่อนไขตรรกะ
+* **Modern Frontend Stack:** ใช้ **Tailwind CSS** ผ่าน CDN และออกแบบ UI แบบ Glassmorphism ซึ่งแสดงถึงการประยุกต์ใช้ Modern Web technologies ร่วมกับ Shell Scripting
+
+---
+
+## สรุปภาพรวม (Comparative Summary)
+
+| Script | วิธีการแสดงผล | จุดเด่นทางเทคนิค (Key Technical Feature) |
+| :--- | :--- | :--- |
+| **Tongtong** | HTML Template Injection | การคำนวณ CPU จาก `/proc/stat` และการใช้ `sed` แทนที่ค่าที่ซับซ้อน |
+| **Tongla** | JS Module Export | การส่งออกข้อมูลเป็น Object (Backend-like) และ Timezone handling |
+| **Mai** | HTML Template | การนับจำนวนไฟล์และ Directory (`find`) |
+| **Pitch** | Standalone HTML | ตรรกะการตัดเกรดสถานะ (Normal/Risk) และ Auto-refresh |
+| **Bambu** | Standalone HTML | การวนลูปสร้างตาราง Process และ CSS Variables |
+| **Nano** | Standalone HTML (Loop) | การทำงานแบบ Infinite Loop และการเก็บ Log History (CSV) |
+| **Ohm** | Standalone HTML | การดึงข้อมูล Hardware Spec (`lscpu`) |
+| **Toby** | Standalone HTML (Tailwind) | การใช้ External API, Hardware Sensors และ Tailwind CSS |

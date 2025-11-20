@@ -1,11 +1,25 @@
-const systemStats = {
+export const systemData = {
   user: "ubuntu",
   ip: "172.16.36.128",
   os: "Ubuntu 24.04.3 LTS",
   kernel: "6.8.0-87-generic",
   cpuUsage: 4.5,
-  memoryUsage: 8,
-  diskUsage: "38",
-  lastUpdated: "2025-11-20 18:46:01 ICT",
-  processes: [{"pid":25, "name":"kworker/1:0-eve", "cpu":0.2, "mem":0.0},{"pid":1759, "name":"kworker/0:0-eve", "cpu":0.2, "mem":0.0},{"pid":1471, "name":"sshd", "cpu":0.1, "mem":0.1},{"pid":813, "name":"vmtoolsd", "cpu":0.1, "mem":0.2},{"pid":4629, "name":"kworker/u4:0-ev", "cpu":0.0, "mem":0.0}]
+  memory: {
+    total: 3902,
+    used: 354
+  },
+  storage: {
+    totalGB: 18.60,
+    usedGB: 6.56,
+    percent: 35.29
+  },
+  lastUpdated: "2025-11-20 18:54:02 ICT",
+  processes: `
+    PID COMMAND         %CPU %MEM
+   5739 python3          0.6  0.4
+     25 kworker/1:0-eve  0.2  0.0
+   1759 kworker/0:0-eve  0.2  0.0
+   1471 sshd             0.1  0.1
+    813 vmtoolsd         0.1  0.2
+  `
 };

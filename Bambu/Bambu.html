@@ -9,7 +9,7 @@
         :root {
             --bg-gradient: linear-gradient(135deg, #fff0f5 0%, #ffe4e1 100%);
             --card-bg: #ffffff;
-            --text-main: #5d4037; /* Brownish Grey (Wood tone) */
+            --text-main: #5d4037; 
             --sakura-light: #ffb7b2;
             --sakura-main: #ff9aa2;
             --sakura-dark: #ff6f91;
@@ -44,9 +44,9 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 35px;
-            border-bottom: 2px dashed var(--sakura-light);
+            margin-bottom: 20px;
             padding-bottom: 15px;
+            border-bottom: 2px dashed var(--sakura-light);
         }
         h1 { 
             margin: 0; 
@@ -54,7 +54,7 @@
             color: var(--sakura-dark); 
             font-size: 1.8rem;
         }
-        h1 span { font-size: 1.5rem; } /* Emoji size */
+        h1 span { font-size: 1.5rem; }
         
         .update-time { 
             font-size: 0.85rem; 
@@ -64,6 +64,29 @@
             border-radius: 20px; 
             box-shadow: 0 4px 10px rgba(255, 154, 162, 0.4);
         }
+
+        /* --- NEW: INFO BAR --- */
+        .info-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 30px;
+            justify-content: center;
+        }
+        .info-pill {
+            background: #fff;
+            padding: 8px 15px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            color: #666;
+            border: 1px solid #ffecec;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+        }
+        .info-pill strong { color: var(--sakura-dark); }
+        .icon { font-style: normal; }
 
         /* --- METRIC CARDS --- */
         .grid {
@@ -97,7 +120,7 @@
         
         .sub-value { font-size: 0.9rem; color: #aaa; margin-bottom: 20px; }
 
-        /* Circular Progress or Bar */
+        /* Progress Bar */
         .progress-track { 
             width: 100%; 
             height: 10px; 
@@ -107,10 +130,9 @@
         }
         .progress-fill { height: 100%; border-radius: 10px; transition: width 1s ease; }
         
-        /* Card Specific Colors */
-        .fill-1 { background: linear-gradient(90deg, #ff9a9e 0%, #fecfef 99%); } /* CPU */
-        .fill-2 { background: linear-gradient(90deg, #a18cd1 0%, #fbc2eb 100%); } /* MEM */
-        .fill-3 { background: linear-gradient(90deg, #fbc2eb 0%, #a6c1ee 100%); } /* DISK */
+        .fill-1 { background: linear-gradient(90deg, #ff9a9e 0%, #fecfef 99%); }
+        .fill-2 { background: linear-gradient(90deg, #a18cd1 0%, #fbc2eb 100%); }
+        .fill-3 { background: linear-gradient(90deg, #fbc2eb 0%, #a6c1ee 100%); }
 
         /* --- TABLE --- */
         .table-container {
@@ -151,31 +173,46 @@
     <div class="container">
         <header>
             <h1><span>🌸</span> System Status</h1>
-            <div class="update-time">20 Nov 2025 18:20:01</div>
+            <div class="update-time">21 Nov 2025 02:30:01</div>
         </header>
 
+        <div class="info-bar">
+            <div class="info-pill">
+                <span class="icon">💻</span> <strong>Host:</strong> kumakuma
+            </div>
+            <div class="info-pill">
+                <span class="icon">🐧</span> <strong>OS:</strong> Ubuntu 24.04.3 LTS
+            </div>
+            <div class="info-pill">
+                <span class="icon">⚙️</span> <strong>Kernel:</strong> 6.8.0-87-generic
+            </div>
+            <div class="info-pill">
+                <span class="icon">🧠</span> <strong>CPU:</strong> 12th Gen Intel(R) Core(TM) i5-12450H
+            </div>
+            <div class="info-pill">
+                <span class="icon">⏱️</span> <strong>Uptime:</strong> 13 minutes
+            </div>
+        </div>
+
         <div class="grid">
-            <!-- CPU -->
             <div class="card">
                 <h3>CPU Usage</h3>
-                <div class="big-value">32%</div>
+                <div class="big-value">10%</div>
                 <div class="sub-value">Processing Power</div>
                 <div class="progress-track">
-                    <div class="progress-fill fill-1" style="width: 32%"></div>
+                    <div class="progress-fill fill-1" style="width: 10%"></div>
                 </div>
             </div>
 
-            <!-- MEMORY -->
             <div class="card">
                 <h3>Memory</h3>
-                <div class="big-value">13%</div>
-                <div class="sub-value">534 MB / 3868 MB</div>
+                <div class="big-value">12%</div>
+                <div class="sub-value">486 MB / 3868 MB</div>
                 <div class="progress-track">
-                    <div class="progress-fill fill-2" style="width: 13%"></div>
+                    <div class="progress-fill fill-2" style="width: 12%"></div>
                 </div>
             </div>
 
-            <!-- STORAGE -->
             <div class="card">
                 <h3>Disk (Root)</h3>
                 <div class="big-value">35%</div>
@@ -200,35 +237,35 @@
                 </thead>
                 <tbody>
                     <tr>
-        <td><span class='pid-badge'>19314</span></td>
+        <td><span class='pid-badge'>1424</span></td>
         <td style='font-weight:600; color:#555;'>bambu</td>
-        <td class='text-sakura-dark'>250%</td>
+        <td class='text-sakura-dark'>0.5%</td>
         <td class='text-sakura'>0.1%</td>
-        <td style='color:#888;'>ps</td>
+        <td style='color:#888;'>sshd</td>
     </tr><tr>
-        <td><span class='pid-badge'>19259</span></td>
+        <td><span class='pid-badge'>706</span></td>
         <td style='font-weight:600; color:#555;'>root</td>
-        <td class='text-sakura-dark'>3.5%</td>
-        <td class='text-sakura'>0.0%</td>
-        <td style='color:#888;'>script.sh</td>
+        <td class='text-sakura-dark'>0.3%</td>
+        <td class='text-sakura'>0.2%</td>
+        <td style='color:#888;'>vmtoolsd</td>
     </tr><tr>
-        <td><span class='pid-badge'>19268</span></td>
-        <td style='font-weight:600; color:#555;'>bambu</td>
-        <td class='text-sakura-dark'>2.0%</td>
-        <td class='text-sakura'>0.0%</td>
-        <td style='color:#888;'>script.sh</td>
+        <td><span class='pid-badge'>1</span></td>
+        <td style='font-weight:600; color:#555;'>root</td>
+        <td class='text-sakura-dark'>0.2%</td>
+        <td class='text-sakura'>0.3%</td>
+        <td style='color:#888;'>systemd</td>
     </tr><tr>
-        <td><span class='pid-badge'>19260</span></td>
-        <td style='font-weight:600; color:#555;'>bambu</td>
-        <td class='text-sakura-dark'>1.7%</td>
+        <td><span class='pid-badge'>32</span></td>
+        <td style='font-weight:600; color:#555;'>root</td>
+        <td class='text-sakura-dark'>0.1%</td>
         <td class='text-sakura'>0.0%</td>
-        <td style='color:#888;'>cron.sh</td>
+        <td style='color:#888;'>kworker/0:2-events</td>
     </tr><tr>
-        <td><span class='pid-badge'>19256</span></td>
+        <td><span class='pid-badge'>1988</span></td>
         <td style='font-weight:600; color:#555;'>bambu</td>
-        <td class='text-sakura-dark'>1.6%</td>
-        <td class='text-sakura'>0.0%</td>
-        <td style='color:#888;'>sh</td>
+        <td class='text-sakura-dark'>0.1%</td>
+        <td class='text-sakura'>0.3%</td>
+        <td style='color:#888;'>vim</td>
     </tr>
                 </tbody>
             </table>

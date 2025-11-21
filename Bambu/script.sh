@@ -2,11 +2,24 @@
 cd /home/bambu/mss2025-project-template/Bambu
 
 # ==========================================
-# System Monitor Generator (Sakura Theme)
+# System Monitor Generator (Sakura Theme v2)
 # ==========================================
 
 # --- 1. Get System Data ---
 LAST_UPDATED=$(LC_TIME=C date "+%d %b %Y %H:%M:%S")
+
+# [NEW] Machine Information
+HOST_NAME=$(hostname)
+# ดึงชื่อ OS แบบสวยๆ จาก /etc/os-release
+if [ -f /etc/os-release ]; then
+    . /etc/os-release
+    OS_NAME=$PRETTY_NAME
+else
+    OS_NAME=$(uname -o)
+fi
+KERNEL_VER=$(uname -r)
+UPTIME_STR=$(uptime -p | sed 's/up //') # ลบคำว่า up ออกเพื่อให้สั้นลง
+CPU_MODEL=$(grep -m1 'model name' /proc/cpuinfo | awk -F: '{print $2}' | sed 's/^[ \t]*//')
 
 # CPU Calculation
 CPU_LOAD=$(top -bn1 | grep "Cpu(s)" | sed "s/.*, *\([0-9.]*\)%* id.*/\1/" | awk '{print 100 - int($1)}' )
@@ -56,7 +69,7 @@ cat <<EOF > $OUTPUT_FILE
         :root {
             --bg-gradient: linear-gradient(135deg, #fff0f5 0%, #ffe4e1 100%);
             --card-bg: #ffffff;
-            --text-main: #5d4037; /* Brownish Grey (Wood tone) */
+            --text-main: #5d4037; 
             --sakura-light: #ffb7b2;
             --sakura-main: #ff9aa2;
             --sakura-dark: #ff6f91;
@@ -91,9 +104,9 @@ cat <<EOF > $OUTPUT_FILE
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 35px;
-            border-bottom: 2px dashed var(--sakura-light);
+            margin-bottom: 20px;
             padding-bottom: 15px;
+            border-bottom: 2px dashed var(--sakura-light);
         }
         h1 { 
             margin: 0; 
@@ -101,7 +114,7 @@ cat <<EOF > $OUTPUT_FILE
             color: var(--sakura-dark); 
             font-size: 1.8rem;
         }
-        h1 span { font-size: 1.5rem; } /* Emoji size */
+        h1 span { font-size: 1.5rem; }
         
         .update-time { 
             font-size: 0.85rem; 
@@ -111,6 +124,29 @@ cat <<EOF > $OUTPUT_FILE
             border-radius: 20px; 
             box-shadow: 0 4px 10px rgba(255, 154, 162, 0.4);
         }
+
+        /* --- NEW: INFO BAR --- */
+        .info-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 30px;
+            justify-content: center;
+        }
+        .info-pill {
+            background: #fff;
+            padding: 8px 15px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            color: #666;
+            border: 1px solid #ffecec;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+        }
+        .info-pill strong { color: var(--sakura-dark); }
+        .icon { font-style: normal; }
 
         /* --- METRIC CARDS --- */
         .grid {
@@ -144,7 +180,7 @@ cat <<EOF > $OUTPUT_FILE
         
         .sub-value { font-size: 0.9rem; color: #aaa; margin-bottom: 20px; }
 
-        /* Circular Progress or Bar */
+        /* Progress Bar */
         .progress-track { 
             width: 100%; 
             height: 10px; 
@@ -154,10 +190,9 @@ cat <<EOF > $OUTPUT_FILE
         }
         .progress-fill { height: 100%; border-radius: 10px; transition: width 1s ease; }
         
-        /* Card Specific Colors */
-        .fill-1 { background: linear-gradient(90deg, #ff9a9e 0%, #fecfef 99%); } /* CPU */
-        .fill-2 { background: linear-gradient(90deg, #a18cd1 0%, #fbc2eb 100%); } /* MEM */
-        .fill-3 { background: linear-gradient(90deg, #fbc2eb 0%, #a6c1ee 100%); } /* DISK */
+        .fill-1 { background: linear-gradient(90deg, #ff9a9e 0%, #fecfef 99%); }
+        .fill-2 { background: linear-gradient(90deg, #a18cd1 0%, #fbc2eb 100%); }
+        .fill-3 { background: linear-gradient(90deg, #fbc2eb 0%, #a6c1ee 100%); }
 
         /* --- TABLE --- */
         .table-container {
@@ -201,8 +236,25 @@ cat <<EOF > $OUTPUT_FILE
             <div class="update-time">$LAST_UPDATED</div>
         </header>
 
+        <div class="info-bar">
+            <div class="info-pill">
+                <span class="icon">💻</span> <strong>Host:</strong> $HOST_NAME
+            </div>
+            <div class="info-pill">
+                <span class="icon">🐧</span> <strong>OS:</strong> $OS_NAME
+            </div>
+            <div class="info-pill">
+                <span class="icon">⚙️</span> <strong>Kernel:</strong> $KERNEL_VER
+            </div>
+            <div class="info-pill">
+                <span class="icon">🧠</span> <strong>CPU:</strong> $CPU_MODEL
+            </div>
+            <div class="info-pill">
+                <span class="icon">⏱️</span> <strong>Uptime:</strong> $UPTIME_STR
+            </div>
+        </div>
+
         <div class="grid">
-            <!-- CPU -->
             <div class="card">
                 <h3>CPU Usage</h3>
                 <div class="big-value">$CPU_LOAD%</div>
@@ -212,7 +264,6 @@ cat <<EOF > $OUTPUT_FILE
                 </div>
             </div>
 
-            <!-- MEMORY -->
             <div class="card">
                 <h3>Memory</h3>
                 <div class="big-value">$MEM_PERCENT%</div>
@@ -222,7 +273,6 @@ cat <<EOF > $OUTPUT_FILE
                 </div>
             </div>
 
-            <!-- STORAGE -->
             <div class="card">
                 <h3>Disk (Root)</h3>
                 <div class="big-value">$DISK_PERCENT%</div>
@@ -256,4 +306,4 @@ cat <<EOF > $OUTPUT_FILE
 </html>
 EOF
 
-echo "Sakura Dashboard generated: $OUTPUT_FILE"
+echo "Sakura Dashboard (with System Info) generated: $OUTPUT_FILE"

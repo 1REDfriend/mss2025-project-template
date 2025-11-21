@@ -1,5 +1,7 @@
 cd /home/pitch/mss2025-project-template/
 
+./test.sh
+
 git checkout Pitch
 
 git add .

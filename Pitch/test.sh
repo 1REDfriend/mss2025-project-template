@@ -57,7 +57,7 @@ else
     DISK_STATUS_CLASS="status-critical"
 fi
 
-LAST_UPDATE=$(date +"%Y-%m-%d %H:%M:%S")
+LAST_UPDATE=$(dimedatectl | awk '/Local time:/ {print$3 " " $4}')
 
 cat <<EOF > "$OUTPUT"
 <!DOCTYPE html>

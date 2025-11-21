@@ -3,14 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ubuntu Server Monitoring</title>
+    <title>Ubuntu Server Monitoring Index</title>
 
-    <!-- Google Font: Ubuntu -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Ubuntu:wght@400;500;700&display=swap" rel="stylesheet">
 
-    <!-- Tailwind CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
 
     <script>
@@ -18,7 +16,8 @@
             theme: {
                 extend: {
                     fontFamily: {
-                        ubuntu: ['Ubuntu', 'system-ui', 'sans-serif'],
+                        ubuntu: ['Ubuntu', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
                     }
                 }
             }
@@ -26,208 +25,259 @@
     </script>
 
     <style>
-        body {
-            font-family: 'Ubuntu', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+        body { font-family: 'Ubuntu', sans-serif; }
+        /* Standard Features Style */
+        .std-label { color: #94a3b8; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.05em; }
+        .std-value { font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: #e2e8f0; font-weight: 500; }
+        
+        /* Unique Features Style */
+        .unique-badge { 
+            font-size: 0.7rem; 
+            background: rgba(16, 185, 129, 0.1); 
+            border: 1px solid rgba(16, 185, 129, 0.2); 
+            color: #34d399; 
+            padding: 2px 8px; 
+            border-radius: 99px;
+            white-space: nowrap;
         }
     </style>
 </head>
-<body class="min-h-screen bg-slate-950 text-slate-100 flex items-center justify-center relative overflow-hidden">
+<body class="min-h-screen bg-slate-950 text-slate-100 py-10 px-4">
 
-    <!-- Background decoration -->
-    <div class="pointer-events-none absolute inset-0">
-        <div class="absolute -top-32 -left-16 w-72 h-72 bg-emerald-500/20 blur-3xl rounded-full"></div>
-        <div class="absolute -bottom-32 -right-16 w-80 h-80 bg-cyan-500/20 blur-3xl rounded-full"></div>
-    </div>
+    <main class="w-full max-w-7xl mx-auto">
+        
+        <header class="mb-10 border-b border-slate-800 pb-6">
+            <h1 class="text-3xl sm:text-4xl font-bold text-slate-100 mb-2">Server Monitoring Index</h1>
+            <p class="text-slate-400">Overview of student projects with standard metrics & unique capabilities</p>
+        </header>
 
-    <main class="relative w-full max-w-5xl px-4 sm:px-6 lg:px-8">
-        <section class="bg-slate-900/70 border border-slate-800/80 backdrop-blur-xl rounded-3xl shadow-2xl shadow-emerald-900/30 p-6 sm:p-8 lg:p-10">
-            <!-- Header -->
-            <header class="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                <div>
-                    <div class="inline-flex items-center gap-2 rounded-full border border-emerald-400/40 bg-emerald-500/10 px-3 py-1 text-xs font-medium text-emerald-200">
-                        <span class="h-2 w-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                        <span>Ubuntu Server Monitoring</span>
+        <div class="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+
+            <!-- Tongtong -->
+            <a href="./Tongtong/Tongtong.html" class="group bg-slate-900/60 border border-slate-800 rounded-2xl p-5 hover:border-emerald-500/50 hover:bg-slate-900 transition-all duration-300 hover:-translate-y-1">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded bg-orange-500/20 text-orange-400 flex items-center justify-center font-bold">T</div>
+                        <h3 class="font-bold text-slate-200">Tongtong</h3>
                     </div>
-                    <h1 class="mt-4 text-3xl sm:text-4xl font-bold tracking-tight">
-                        Welcome to your server dashboard
-                    </h1>
-                    <p class="mt-2 text-sm sm:text-base text-slate-300 max-w-xl">
-                        Select a server to view its detailed monitoring status, usage statistics, and health information.
-                    </p>
+                    <div class="h-2 w-2 rounded-full bg-emerald-500 animate-pulse"></div>
                 </div>
 
-                <div class="flex flex-col items-start sm:items-end gap-1 text-xs sm:text-sm text-slate-400">
-                    <span class="uppercase tracking-[0.18em] text-slate-500">Status Overview</span>
-                    <span class="text-slate-200 font-medium">Cluster: <span class="text-emerald-300">Online</span></span>
-                    <span>Last refresh: <span class="text-slate-300">Just now</span></span>
-                </div>
-            </header>
-
-            <!-- Grid of servers -->
-            <section class="mt-4">
-                <div class="flex items-center justify-between mb-3">
-                    <h2 class="text-sm font-semibold tracking-wide text-slate-300 uppercase">
-                        Servers
-                    </h2>
-                    <span class="text-xs text-slate-400">
-                        8 instances
-                    </span>
+                <div class="grid grid-cols-2 gap-y-3 mb-4 border-b border-slate-800 pb-4">
+                    <div><div class="std-value">CPU Usage</div></div>
+                    <div><div class="std-value">Memory Usage</div></div>
+                    <div><div class="std-value">Storage Usage</div></div>
+                    <div><div class="std-value">Uptime</div></div>
                 </div>
 
-                <div class="grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-                    <!-- Bambu -->
-                    <a href="./Bambu/Bambu.html"
-                       class="group relative overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/70 px-4 py-4 flex items-center justify-between gap-3 hover:border-emerald-400/70 hover:bg-slate-900/95 transition">
-                        <div class="flex items-center gap-3">
-                            <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500/15 border border-emerald-400/40 text-sm font-semibold text-emerald-300">
-                                B
-                            </div>
-                            <div>
-                                <p class="text-sm font-semibold text-slate-50">
-                                    Bambu Server
-                                </p>
-                            </div>
-                        </div>
-                        <span class="text-[11px] uppercase tracking-[0.18em] text-emerald-300 group-hover:translate-x-0.5 transition">
-                            View
-                        </span>
-                    </a>
-
-                    <!-- Mai -->
-                    <a href="./Mai/Mai.html"
-                       class="group relative overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/70 px-4 py-4 flex items-center justify-between gap-3 hover:border-emerald-400/70 hover:bg-slate-900/95 transition">
-                        <div class="flex items-center gap-3">
-                            <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500/15 border border-emerald-400/40 text-sm font-semibold text-emerald-300">
-                                M
-                            </div>
-                            <div>
-                                <p class="text-sm font-semibold text-slate-50">
-                                    Mai Server
-                                </p>
-                            </div>
-                        </div>
-                        <span class="text-[11px] uppercase tracking-[0.18em] text-emerald-300 group-hover:translate-x-0.5 transition">
-                            View
-                        </span>
-                    </a>
-
-                    <!-- Tongla -->
-                    <a href="./Tongla/Tongla.html"
-                       class="group relative overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/70 px-4 py-4 flex items-center justify-between gap-3 hover:border-emerald-400/70 hover:bg-slate-900/95 transition">
-                        <div class="flex items-center gap-3">
-                            <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500/15 border border-emerald-400/40 text-sm font-semibold text-emerald-300">
-                                T
-                            </div>
-                            <div>
-                                <p class="text-sm font-semibold text-slate-50">
-                                    Tongla Server
-                                </p>
-                            </div>
-                        </div>
-                        <span class="text-[11px] uppercase tracking-[0.18em] text-emerald-300 group-hover:translate-x-0.5 transition">
-                            View
-                        </span>
-                    </a>
-
-                    <!-- Toby -->
-                    <a href="./Toby/Toby.html"
-                       class="group relative overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/70 px-4 py-4 flex items-center justify-between gap-3 hover:border-emerald-400/70 hover:bg-slate-900/95 transition">
-                        <div class="flex items-center gap-3">
-                            <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500/15 border border-emerald-400/40 text-sm font-semibold text-emerald-300">
-                                T
-                            </div>
-                            <div>
-                                <p class="text-sm font-semibold text-slate-50">
-                                    Toby Server
-                                </p>
-                            </div>
-                        </div>
-                        <span class="text-[11px] uppercase tracking-[0.18em] text-emerald-300 group-hover:translate-x-0.5 transition">
-                            View
-                        </span>
-                    </a>
-
-                    <!-- Nano -->
-                    <a href="./Nano/Nano.html"
-                       class="group relative overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/70 px-4 py-4 flex items-center justify-between gap-3 hover:border-emerald-400/70 hover:bg-slate-900/95 transition">
-                        <div class="flex items-center gap-3">
-                            <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500/15 border border-emerald-400/40 text-sm font-semibold text-emerald-300">
-                                N
-                            </div>
-                            <div>
-                                <p class="text-sm font-semibold text-slate-50">
-                                    Nano Server
-                                </p>
-                            </div>
-                        </div>
-                        <span class="text-[11px] uppercase tracking-[0.18em] text-emerald-300 group-hover:translate-x-0.5 transition">
-                            View
-                        </span>
-                    </a>
-
-                    <!-- Tongtong -->
-                    <a href="./Tongtong/Tongtong.html"
-                       class="group relative overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/70 px-4 py-4 flex items-center justify-between gap-3 hover:border-emerald-400/70 hover:bg-slate-900/95 transition">
-                        <div class="flex items-center gap-3">
-                            <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500/15 border border-emerald-400/40 text-sm font-semibold text-emerald-300">
-                                T
-                            </div>
-                            <div>
-                                <p class="text-sm font-semibold text-slate-50">
-                                    Tongtong Server
-                                </p>
-                            </div>
-                        </div>
-                        <span class="text-[11px] uppercase tracking-[0.18em] text-emerald-300 group-hover:translate-x-0.5 transition">
-                            View
-                        </span>
-                    </a>
-
-                    <!-- Ohm -->
-                    <a href="./Ohm/Ohm.html"
-                       class="group relative overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/70 px-4 py-4 flex items-center justify-between gap-3 hover:border-emerald-400/70 hover:bg-slate-900/95 transition">
-                        <div class="flex items-center gap-3">
-                            <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500/15 border border-emerald-400/40 text-sm font-semibold text-emerald-300">
-                                O
-                            </div>
-                            <div>
-                                <p class="text-sm font-semibold text-slate-50">
-                                    Ohm Server
-                                </p>
-                            </div>
-                        </div>
-                        <span class="text-[11px] uppercase tracking-[0.18em] text-emerald-300 group-hover:translate-x-0.5 transition">
-                            View
-                        </span>
-                    </a>
-
-                    <!-- Pitch -->
-                    <a href="./Pitch/Pitch.html"
-                       class="group relative overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/70 px-4 py-4 flex items-center justify-between gap-3 hover:border-emerald-400/70 hover:bg-slate-900/95 transition">
-                        <div class="flex items-center gap-3">
-                            <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500/15 border border-emerald-400/40 text-sm font-semibold text-emerald-300">
-                                P
-                            </div>
-                            <div>
-                                <p class="text-sm font-semibold text-slate-50">
-                                    Pitch Server
-                                </p>
-                            </div>
-                        </div>
-                        <span class="text-[11px] uppercase tracking-[0.18em] text-emerald-300 group-hover:translate-x-0.5 transition">
-                            View
-                        </span>
-                    </a>
+                <div class="space-y-2">
+                    <p class="text-[10px] text-slate-500 uppercase font-bold tracking-wider">Special Features</p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="unique-badge">Network RX/TX</span>
+                        <span class="unique-badge">Swap Memory</span>
+                        <span class="unique-badge">Load Avg (1/5/15)</span>
+                        <span class="unique-badge">Kernel Calculation</span>
+                    </div>
                 </div>
-            </section>
+            </a>
 
-            <!-- Footer -->
-            <footer class="mt-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs text-slate-500">
-                <span>© Ubuntu Monitoring Dashboard</span>
-                <span>Use this panel to quickly jump to each server's detailed stats page.</span>
-            </footer>
-        </section>
+            <!-- Tongla -->
+            <a href="./Tongla/Tongla.html" class="group bg-slate-900/60 border border-slate-800 rounded-2xl p-5 hover:border-emerald-500/50 hover:bg-slate-900 transition-all duration-300 hover:-translate-y-1">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded bg-cyan-500/20 text-cyan-400 flex items-center justify-center font-bold">T</div>
+                        <h3 class="font-bold text-slate-200">Tongla</h3>
+                    </div>
+                    <div class="h-2 w-2 rounded-full bg-emerald-500 animate-pulse"></div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-y-3 mb-4 border-b border-slate-800 pb-4">
+                    <div><div class="std-value">CPU Usage</div></div>
+                    <div><div class="std-value">Memory Usage</div></div>
+                    <div><div class="std-value">Storage Usage</div></div>
+                    <div><div class="std-value">Uptime</div></div>
+                </div>
+
+                <div class="space-y-2">
+                    <p class="text-[10px] text-slate-500 uppercase font-bold tracking-wider">Special Features</p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="unique-badge">Backend Data (JS)</span>
+                        <span class="unique-badge">OS Name</span>
+                        <span class="unique-badge">KB to GB Convert</span>
+                        <span class="unique-badge">Timezone (BKK)</span>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Mai -->
+            <a href="./Mai/Mai.html" class="group bg-slate-900/60 border border-slate-800 rounded-2xl p-5 hover:border-emerald-500/50 hover:bg-slate-900 transition-all duration-300 hover:-translate-y-1">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded bg-pink-500/20 text-pink-400 flex items-center justify-center font-bold">M</div>
+                        <h3 class="font-bold text-slate-200">Mai</h3>
+                    </div>
+                    <div class="h-2 w-2 rounded-full bg-emerald-500 animate-pulse"></div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-y-3 mb-4 border-b border-slate-800 pb-4">
+                    <div><div class="std-value">CPU Usage</div></div>
+                    <div><div class="std-value">Memory Usage</div></div>
+                    <div><div class="std-value">Storage Usage</div></div>
+                    <div><div class="std-value">Uptime</div></div>
+                </div>
+
+                <div class="space-y-2">
+                    <p class="text-[10px] text-slate-500 uppercase font-bold tracking-wider">Special Features</p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="unique-badge">File Counter (.txt)</span>
+                        <span class="unique-badge">Directory Counter</span>
+                        <span class="unique-badge">Integer Math</span>
+                        <span class="unique-badge">Simple Template</span>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Toby -->
+            <a href="./Toby/Toby.html" class="group bg-slate-900/60 border border-slate-800 rounded-2xl p-5 hover:border-emerald-500/50 hover:bg-slate-900 transition-all duration-300 hover:-translate-y-1">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded bg-indigo-500/20 text-indigo-400 flex items-center justify-center font-bold">T</div>
+                        <h3 class="font-bold text-slate-200">Toby</h3>
+                    </div>
+                    <div class="h-2 w-2 rounded-full bg-yellow-500 animate-pulse"></div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-y-3 mb-4 border-b border-slate-800 pb-4">
+                    <div><div class="std-value">CPU Usage</div></div>
+                    <div><div class="std-value">Memory Usage</div></div>
+                    <div><div class="std-value">Storage Usage</div></div>
+                    <div><div class="std-value">Uptime</div></div>
+                </div>
+
+                <div class="space-y-2">
+                    <p class="text-[10px] text-slate-500 uppercase font-bold tracking-wider">Special Features</p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="unique-badge">Public IP (API)</span>
+                        <span class="unique-badge">CPU Temperature</span>
+                        <span class="unique-badge">Active Processes</span>
+                        <span class="unique-badge">Package Count</span>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Nano -->
+            <a href="./Nano/Nano.html" class="group bg-slate-900/60 border border-slate-800 rounded-2xl p-5 hover:border-emerald-500/50 hover:bg-slate-900 transition-all duration-300 hover:-translate-y-1">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded bg-lime-500/20 text-lime-400 flex items-center justify-center font-bold">N</div>
+                        <h3 class="font-bold text-slate-200">Nano</h3>
+                    </div>
+                    <div class="h-2 w-2 rounded-full bg-emerald-500 animate-pulse"></div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-y-3 mb-4 border-b border-slate-800 pb-4">
+                    <div><div class="std-value">CPU Usage</div></div>
+                    <div><div class="std-value">Memory Usage</div></div>
+                    <div><div class="std-value">Storage Usage</div></div>
+                    <div><div class="std-value">Uptime</div></div>
+                </div>
+
+                <div class="space-y-2">
+                    <p class="text-[10px] text-slate-500 uppercase font-bold tracking-wider">Special Features</p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="unique-badge">History Log (Last 5)</span>
+                        <span class="unique-badge">OS Version</span>
+                        <span class="unique-badge">Daemon Loop</span>
+                        <span class="unique-badge">CSV Data</span>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Ohm -->
+            <a href="./Ohm/Ohm.html" class="group bg-slate-900/60 border border-slate-800 rounded-2xl p-5 hover:border-emerald-500/50 hover:bg-slate-900 transition-all duration-300 hover:-translate-y-1">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded bg-purple-500/20 text-purple-400 flex items-center justify-center font-bold">O</div>
+                        <h3 class="font-bold text-slate-200">Ohm</h3>
+                    </div>
+                    <div class="h-2 w-2 rounded-full bg-red-500 animate-pulse"></div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-y-3 mb-4 border-b border-slate-800 pb-4">
+                    <div><div class="std-value">CPU Usage</div></div>
+                    <div><div class="std-value">Memory Usage</div></div>
+                    <div><div class="std-value">Storage Usage</div></div>
+                    <div><div class="std-value">Uptime</div></div>
+                </div>
+
+                <div class="space-y-2">
+                    <p class="text-[10px] text-slate-500 uppercase font-bold tracking-wider">Special Features</p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="unique-badge">CPU Model Name</span>
+                        <span class="unique-badge">Kernel Version</span>
+                        <span class="unique-badge">Hostname</span>
+                        <span class="unique-badge">Gradient UI</span>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Pitch -->
+            <a href="./Pitch/Pitch.html" class="group bg-slate-900/60 border border-slate-800 rounded-2xl p-5 hover:border-emerald-500/50 hover:bg-slate-900 transition-all duration-300 hover:-translate-y-1">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded bg-teal-500/20 text-teal-400 flex items-center justify-center font-bold">P</div>
+                        <h3 class="font-bold text-slate-200">Pitch</h3>
+                    </div>
+                    <div class="h-2 w-2 rounded-full bg-emerald-500 animate-pulse"></div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-y-3 mb-4 border-b border-slate-800 pb-4">
+                    <div><div class="std-value">CPU Usage</div></div>
+                    <div><div class="std-value">Memory Usage</div></div>
+                    <div><div class="std-value">Storage Usage</div></div>
+                    <div><div class="std-value">Uptime</div></div>
+                </div>
+
+                <div class="space-y-2">
+                    <p class="text-[10px] text-slate-500 uppercase font-bold tracking-wider">Special Features</p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="unique-badge">Risk Assessment</span>
+                        <span class="unique-badge">Load Average</span>
+                        <span class="unique-badge">System Arch</span>
+                        <span class="unique-badge">Auto Refresh</span>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Bambu -->
+            <a href="./Bambu/Bambu.html" class="group bg-slate-900/60 border border-slate-800 rounded-2xl p-5 hover:border-emerald-500/50 hover:bg-slate-900 transition-all duration-300 hover:-translate-y-1">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold">B</div>
+                        <h3 class="font-bold text-slate-200">Bambu</h3>
+                    </div>
+                    <div class="h-2 w-2 rounded-full bg-emerald-500 animate-pulse"></div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-y-3 mb-4 border-b border-slate-800 pb-4">
+                    <div><div class="std-value">CPU Usage</div></div>
+                    <div><div class="std-value">Memory Usage</div></div>
+                    <div><div class="std-value">Storage Usage</div></div>
+                    <div><div class="std-value">Uptime</div></div>
+                </div>
+
+                <div class="space-y-2">
+                    <p class="text-[10px] text-slate-500 uppercase font-bold tracking-wider">Special Features</p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="unique-badge">Top 5 Processes</span>
+                        <span class="unique-badge">User/PID Info</span>
+                        <span class="unique-badge">Sakura Theme</span>
+                        <span class="unique-badge">Table Generation</span>
+                    </div>
+                </div>
+            </a>
+
+        </div>
     </main>
 </body>
 </html>
-

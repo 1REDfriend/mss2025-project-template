@@ -18,12 +18,12 @@
           System Status - <span class="text-emerald-400 font-mono">ubuntu-server</span>
         </h1>
         <p class="text-sm text-slate-400 mt-1">
-          Last updated: <span class="font-mono text-slate-200">2025-11-21 02:06:01</span>
+          Last updated: <span class="font-mono text-slate-200">2025-11-21 03:10:01</span>
         </p>
       </div>
       <div class="flex flex-wrap gap-2 text-xs font-mono text-slate-300">
         <span class="px-2 py-1 rounded-full bg-slate-900/60 border border-slate-700">
-          Uptime: <span class="text-emerald-400">up 15 hours, 55 minutes</span>
+          Uptime: <span class="text-emerald-400">up 16 hours, 59 minutes</span>
         </span>
         <span class="px-2 py-1 rounded-full bg-slate-900/60 border border-slate-700">
           Kernel: <span class="text-blue-400">6.8.0-87-generic</span>
@@ -43,7 +43,7 @@
       <div class="mt-2">
         <canvas id="usageChart" class="w-full h-48"></canvas>
         <p class="mt-2 text-xs text-slate-500 font-mono">
-          CPU: 1.0% · RAM: 15.3% · Disk: 39% · Swap: 0.0% · GPU: **GPU_USAGE**%
+          CPU: 3.9% · RAM: 15.2% · Disk: 39%
         </p>
       </div>
     </section>
@@ -59,7 +59,7 @@
         <div class="space-y-2 text-sm">
           <div class="flex justify-between">
             <span class="text-slate-400">Usage (%)</span>
-            <span class="font-mono text-emerald-400">1.0%</span>
+            <span class="font-mono text-emerald-400">3.9%</span>
           </div>
           <div class="flex justify-between">
             <span class="text-slate-400">Load (1m / 5m / 15m)</span>
@@ -77,10 +77,10 @@
         <div class="mt-4">
           <div class="flex justify-between text-xs text-slate-400 mb-1">
             <span>CPU Usage</span>
-            <span class="font-mono text-emerald-400">1.0%</span>
+            <span class="font-mono text-emerald-400">3.9%</span>
           </div>
           <div class="h-2 rounded-full bg-slate-800 overflow-hidden">
-            <div class="h-full bg-emerald-500" style="width: 1.0%;"></div>
+            <div class="h-full bg-emerald-500" style="width: 3.9%;"></div>
           </div>
         </div>
       </section>
@@ -92,12 +92,12 @@
           <div class="flex justify-between">
             <span class="text-slate-400">RAM Used / Total (MiB)</span>
             <span class="font-mono text-violet-300">
-              592 / 3868
+              588 / 3868
             </span>
           </div>
           <div class="flex justify-between">
             <span class="text-slate-400">RAM Usage (%)</span>
-            <span class="font-mono text-emerald-400">15.3%</span>
+            <span class="font-mono text-emerald-400">15.2%</span>
           </div>
           <div class="flex justify-between">
             <span class="text-slate-400">Swap Used / Total (MiB)</span>
@@ -115,10 +115,10 @@
         <div class="mt-4">
           <div class="flex justify-between text-xs text-slate-400 mb-1">
             <span>RAM Usage</span>
-            <span class="font-mono text-emerald-400">15.3%</span>
+            <span class="font-mono text-emerald-400">15.2%</span>
           </div>
           <div class="h-2 rounded-full bg-slate-800 overflow-hidden">
-            <div class="h-full bg-violet-500" style="width: 15.3%;"></div>
+            <div class="h-full bg-violet-500" style="width: 15.2%;"></div>
           </div>
         </div>
 
@@ -221,7 +221,7 @@
         <div class="space-y-2 text-sm">
           <div class="flex justify-between">
             <span class="text-slate-400">Total Processes</span>
-            <span class="font-mono text-slate-200">228</span>
+            <span class="font-mono text-slate-200">227</span>
           </div>
           <div class="flex justify-between">
             <span class="text-slate-400">Running</span>
@@ -229,12 +229,12 @@
           </div>
           <div class="flex justify-between">
             <span class="text-slate-400">Sleeping</span>
-            <span class="font-mono text-sky-300">132</span>
+            <span class="font-mono text-sky-300">131</span>
           </div>
           <div class="flex justify-between">
             <span class="text-slate-400">Top Process</span>
             <span class="font-mono text-pink-300">
-              vim (CPU 0.5% | MEM 0.3%)
+              sshd (CPU 0.2% | MEM 0.1%)
             </span>
           </div>
         </div>
@@ -244,7 +244,7 @@
           <div class="flex justify-between text-xs text-slate-400 mb-1">
             <span>Active vs Total</span>
             <span class="font-mono text-emerald-300">
-              1 running / 228 total
+              1 running / 227 total
             </span>
           </div>
           <div class="h-2 rounded-full bg-slate-800 overflow-hidden">
@@ -258,7 +258,7 @@
     <!-- Footer -->
     <footer class="mt-6 text-xs text-slate-500 flex justify-between items-center">
       <span class="font-mono">
-        Generated on: <span class="text-slate-300">2025-11-21 02:06:01</span>
+        Generated on: <span class="text-slate-300">2025-11-21 03:10:01</span>
       </span>
       <span class="font-mono">
         Host ID: <span class="text-slate-300">17c24b7390fa40f081923cd41349c94a</span>
@@ -272,19 +272,17 @@
       var canvas = document.getElementById('usageChart');
       if (!canvas || typeof Chart === 'undefined') return;
 
-      var cpu  = Number("1.0");
-      var ram  = Number("15.3");
+      var cpu  = Number("3.9");
+      var ram  = Number("15.2");
       var disk = Number("39");
-      var swap = Number("0.0");
-      var gpu  = Number("**GPU_USAGE**");
 
       new Chart(canvas, {
         type: 'bar',
         data: {
-          labels: ['CPU', 'RAM', 'Disk', 'Swap', 'GPU'],
+          labels: ['CPU', 'RAM', 'Disk'],
           datasets: [{
             label: 'Usage (%)',
-            data: [cpu, ram, disk, swap, gpu],
+            data: [cpu, ram, disk],
           }]
         },
         options: {

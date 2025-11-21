@@ -43,7 +43,7 @@
       <div class="mt-2">
         <canvas id="usageChart" class="w-full h-48"></canvas>
         <p class="mt-2 text-xs text-slate-500 font-mono">
-          CPU: **CPU_USAGE**% · RAM: **MEM_USED_PCT**% · Disk: **DISK_ROOT_USED_PCT**% · Swap: **SWAP_USED_PCT**% · GPU: **GPU_USAGE**%
+          CPU: **CPU_USAGE**% · RAM: **MEM_USED_PCT**% · Disk: **DISK_ROOT_USED_PCT**%
         </p>
       </div>
     </section>
@@ -275,16 +275,14 @@
       var cpu  = Number("**CPU_USAGE**");
       var ram  = Number("**MEM_USED_PCT**");
       var disk = Number("**DISK_ROOT_USED_PCT**");
-      var swap = Number("**SWAP_USED_PCT**");
-      var gpu  = Number("**GPU_USAGE**");
 
       new Chart(canvas, {
         type: 'bar',
         data: {
-          labels: ['CPU', 'RAM', 'Disk', 'Swap', 'GPU'],
+          labels: ['CPU', 'RAM', 'Disk'],
           datasets: [{
             label: 'Usage (%)',
-            data: [cpu, ram, disk, swap, gpu],
+            data: [cpu, ram, disk],
           }]
         },
         options: {

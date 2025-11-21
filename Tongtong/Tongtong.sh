@@ -2,7 +2,7 @@
 # Simple system status -> HTML generator
 # Usage: ./gen_status.sh [template.html] [output.html]
 
-cd  /home/supakorn/git/mas2025-project-template/Tongtong
+cd  /home/supakorn/git/mss2025-project-template/Tongtong
 
 set -eu
 
